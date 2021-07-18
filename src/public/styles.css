@@ -1,3 +1,9 @@
+/*
+ * Copyright (c) 2021, Bastian Leicht <mail@bastainleicht.de>
+ *
+ * PDX-License-Identifier: BSD-2-Clause
+ */
+
 h1 {
 	font-family: 'Comic Sans MS';
 }
@@ -12,6 +18,10 @@ img {
 	width: 100%;
 }
 
-#enable-sound {
+.music-button-enabled {
 	display: block;
+}
+
+.music-button-disabled {
+	display: none;
 }

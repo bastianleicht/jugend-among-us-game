@@ -5,7 +5,8 @@ const socket = io({
 });
 
 const emergencyMeeting$ = document.querySelector('#emergency-meeting');
-const enableSound$ = document.querySelector('#enable-sound');
+const enableMusic$ = document.querySelector('#enable-music');
+const disableMusic$ = document.querySelector('#disable-music');
 const progress$ = document.querySelector('#progress');
 const progressBar$ = document.querySelector('.progress-bar');
 const report$ = document.querySelector('#report');
@@ -112,12 +113,26 @@ socket.on('play-win', async () => {
 	await playSound(SOUNDS.youWin);
 });
 
-enableSound$.addEventListener('click', async () => {
-	console.log('enable sound');
-	enableSound$.style.display = 'none';
+soundPlayer.play();
+
+enableMusic$.addEventListener('click', async () => {
+	log('Music Enabled')
+	enableMusic$.classList.remove('music-button-enabled');
+	enableMusic$.classList.add('music-button-disabled');
+	disableMusic$.classList.remove('music-button-disabled');
+	disableMusic$.classList.add('music-button-enabled');
 	await backgroundMusicPlayer.play();
 	await soundPlayer.play();
 });
+
+disableMusic$.addEventListener('click', async () => {
+	log('Music Disabled')
+	enableMusic$.classList.remove('music-button-disabled');
+	enableMusic$.classList.add('music-button-enabled');
+	disableMusic$.classList.remove('music-button-enabled');
+	disableMusic$.classList.add('music-button-disabled');
+	await backgroundMusicPlayer.pause();
+})
 
 async function playSound(url) {
 	soundPlayer.src = url;
