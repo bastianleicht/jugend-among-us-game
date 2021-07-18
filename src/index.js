@@ -31,7 +31,6 @@ const TASKS = [
 	'Beat Smash (Upstairs guest room)',
 	'Hit a layup (Basketball court)',
 	'Take photo (Green screen)',
-	// 'Mess with Jack (basement)',
 	'Bounce ping pong ball 10 times (front door)',
 	'Take a lap (Around pool)',
 	'Flip a pillow (Activity room)'
@@ -66,9 +65,7 @@ app.use('/', express.static(path.join(__dirname, 'public')));
 
 io.on('connection', socket => {
 	console.log(
-		`A user connected with role: ${socket.handshake.query.role}, total: ${
-			io.of('/').sockets.size
-		}`
+		`A user (${socket.handshake.query.customName}) connected with role: ${socket.handshake.query.role}, total: ${io.of('/').sockets.size}`
 	);
 
 	socket.on('start-game', () => {
@@ -87,7 +84,7 @@ io.on('connection', socket => {
 		}
 		const playerIds = players.map(player => player.id);
 		console.log('player sockets', players.length);
-		console.log(playerIds)
+		console.log(playerIds)		//TODO: Remove!
 
 		// Assign impostors
 		const impostors = _.shuffle(playerIds).slice(0, N_IMPOSTORS);
@@ -153,6 +150,7 @@ io.on('connection', socket => {
 	});
 
 	socket.on('task-complete', taskId => {
+		console.log(`task-complete: ${taskId}`)
 		if (typeof taskProgress[taskId] === 'boolean') {
 			taskProgress[taskId] = true;
 		}
@@ -171,6 +169,7 @@ function emitTaskProgress() {
 	const tasks = Object.values(taskProgress);
 	const completed = tasks.filter(task => task).length;
 	const total = completed / tasks.length;
+	console.log(`Emitting Progress to: ${total}`)
 	io.emit('progress', total);
 
 	if (total === 1) {
