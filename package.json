@@ -1,0 +1,26 @@
+{
+	"name": "jugend-among-us-game",
+	"version": "1.0.0",
+	"description": "A Web based Among Us game",
+	"main": "src/index.js",
+	"license": "BSD-2-Clause",
+	"author": "Bastian Leicht <mail@bastianleicht.de> (https://bastianleicht.de)",
+	"scripts": {
+		"start": "node src/index.js",
+		"test": "echo \"Error: no test specified\" && exit 1"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/bastianleicht/jugend-among-us-game.git"
+	},
+	"bugs": {
+		"url": "https://github.com/bastianleicht/jugend-among-us-game/issues"
+	},
+	"dependencies": {
+		"express": "^4.17.1",
+		"lodash": "^4.17.21",
+		"os": "^0.1.2",
+		"socket.io": "^4.1.1",
+		"uuid": "^8.3.2"
+	}
+}
