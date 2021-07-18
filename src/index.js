@@ -74,9 +74,15 @@ io.on('connection', socket => {
 	socket.on('start-game', () => {
 		// Get player sockets
 		const players = [];
+		const customPlayers = [];
 		for (const [_, socket] of io.of('/').sockets) {
 			if (socket.handshake.query.role === 'PLAYER') {
 				players.push(socket);
+
+				let playerInfo = {};
+				playerInfo.socketID = socket.id;
+				playerInfo.customName = socket.handshake.query.customName;
+				customPlayers.push(playerInfo);
 			}
 		}
 		const playerIds = players.map(player => player.id);
@@ -90,10 +96,10 @@ io.on('connection', socket => {
 				socket.emit('getID', id)
 				if (impostors.includes(id)) {
 					socket.emit('role', 'Impostor');
-					console.log(id, 'is impostor');
+					console.log(`${id} (${socket.handshake.query.customName}) is Impostor!`);
 				} else {
 					socket.emit('role', 'Crewmate');
-					console.log(id, 'is crew');
+					console.log(`${id} (${socket.handshake.query.customName}) is Crewmate!`);
 				}
 			}
 		}
@@ -118,6 +124,7 @@ io.on('connection', socket => {
 				}
 
 				const taskId = uuid();
+				playerTasks[player.id]['customName'] = player.handshake.query.customName;
 				playerTasks[player.id][taskId] = shuffledTasks.pop();
 
 				if (!impostors.includes(player.id)) {
