@@ -1,3 +1,9 @@
+<!--
+  ~ Copyright (c) 2021, Bastian Leicht <mail@bastainleicht.de>
+  ~
+  ~ PDX-License-Identifier: BSD-2-Clause
+  -->
+
 <!DOCTYPE html>
 <html lang="en">
 	<head>
@@ -14,7 +20,8 @@
 		<small>Player ID: <span id="player-uuid"></span></small>
 		<br>
 
-		<button id="enable-sound">Enable Sound</button>
+		<button id="enable-music" class="music-button-enabled">Enable Music</button>
+		<button id="disable-music" class="music-button-disabled">Disable Music</button>
 
 		<button id="report">
 			<img src="/images/report.png" alt="Report"/>
@@ -26,7 +33,7 @@
 
 		<p>Progress is <span id="progress">0</span>% complete</p>
 		<div class="progress">
-			<div class="progress-bar progress-bar-striped bg-success" role="progressbar" style="width: 0%"></div>
+			<div class="progress-bar progress-bar-striped bg-success" role="progressbar" title="Task Progress" style="width: 0%"></div>
 		</div>
 
 		<h2>Tasks</h2>

@@ -125,7 +125,6 @@ enableMusic$.addEventListener('click', async () => {
 	disableMusic$.classList.remove('music-button-disabled');
 	disableMusic$.classList.add('music-button-enabled');
 	await backgroundMusicPlayer.play();
-	await soundPlayer.play();
 });
 
 disableMusic$.addEventListener('click', async () => {
