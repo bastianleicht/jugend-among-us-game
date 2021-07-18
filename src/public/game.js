@@ -4,6 +4,24 @@ const socket = io({
 	}
 });
 
+*/
+const DEBUG = true;
+
+const socket = io({
+	query: {
+		role: 'PLAYER',
+		customName: localStorage.getItem('customName')
+	}
+});
+
+const customName$ = localStorage.getItem('customName');
+
+if(customName$ === null) {
+	//localStorage.setItem('customName', 'Steve')
+}
+
+log(`Got customName: ${customName$}`)
+
 const emergencyMeeting$ = document.querySelector('#emergency-meeting');
 const enableMusic$ = document.querySelector('#enable-music');
 const disableMusic$ = document.querySelector('#disable-music');
@@ -12,6 +30,9 @@ const progressBar$ = document.querySelector('.progress-bar');
 const report$ = document.querySelector('#report');
 const tasks$ = document.querySelector('#tasks');
 const player_uuid$ = document.querySelector('#player-uuid');
+const player_custom_name$ = document.querySelector('#player-custom-name');
+
+player_custom_name$.innerHTML = localStorage.getItem('customName')
 
 report$.addEventListener('click', () => {
 	socket.emit('report');
