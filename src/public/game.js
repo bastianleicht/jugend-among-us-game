@@ -23,6 +23,7 @@ emergencyMeeting$.addEventListener('click', () => {
 });
 
 socket.on('getID', id => {
+	log(`Received Player ID: ${id}`)
 	player_uuid$.innerHTML = id;
 })
 
@@ -42,7 +43,7 @@ socket.on('tasks', tasks => {
 		// checkbox.value = "value";
 		// checkbox.id = "id";
 		checkbox$.onchange = event => {
-			console.log('checkbox change', event.target.checked);
+			log('Checkbox changed: ' + event.target.checked);
 			if (event.target.checked) {
 				socket.emit('task-complete', taskId);
 			} else {
@@ -77,6 +78,8 @@ function hideRole() {
 }
 
 socket.on('progress', progress => {
+	let calc_progress = progress * 100
+	log(`Updated Progress to: ${calc_progress}%`)
 	progress$.innerHTML = (progress * 100).toFixed(0);
 	progressBar$.style.width = `${progress * 100}%`;
 });
@@ -137,4 +140,21 @@ disableMusic$.addEventListener('click', async () => {
 async function playSound(url) {
 	soundPlayer.src = url;
 	await soundPlayer.play();
+}
+
+function log(message) {
+	let d, hours ,minutes, seconds;
+	if ('undefined' !== typeof console && DEBUG) {
+		d = new Date();
+		hours = d.getHours();
+		if (hours < 10)
+			hours = "0" + hours;
+		minutes = d.getMinutes();
+		if (minutes < 10)
+			minutes = "0" + minutes;
+		seconds = d.getSeconds();
+		if (seconds < 10)
+			seconds = "0" + seconds;
+		console.log(hours + ':' + minutes + ':' + seconds + ' | AMONG US > ' + message);
+	}
 }
