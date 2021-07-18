@@ -91,7 +91,7 @@ async function wait(milliseconds) {
 }
 
 const soundPlayer = new Audio();
-const backgroundMusicPlayer = new Audio('/sounds/titlesong.mp3');
+const backgroundMusicPlayer = new Audio('/sounds/title-song.mp3');
 const SOUNDS = {
 	meeting: '/sounds/meeting.mp3',
 	sabotage: '/sounds/sabotage.mp3',
