@@ -11,6 +11,7 @@ const path = require('path');
 const { Server } = require('socket.io');
 const { v4: uuid } = require('uuid');
 
+const LOGGING = true;
 const PORT = 3000;
 const N_TASKS = 5;
 const N_IMPOSTORS = 1;
@@ -63,23 +64,41 @@ app.get('/admin', (req, res) => {
 
 app.use('/', express.static(path.join(__dirname, 'public')));
 
+const connected_player_list = [];
+const player_list = [];
 io.on('connection', socket => {
-	console.log(
-		`A user (${socket.handshake.query.customName}) connected with role: ${socket.handshake.query.role}, total: ${io.of('/').sockets.size}`
-	);
+	player_list.push(socket)
+
+	log(`${socket.handshake.query.customName} (${socket.handshake.query.customID}) connected as: ${socket.handshake.query.role}, total: ${io.of('/').sockets.size}`);
+
+	if(socket.handshake.query.role === 'PLAYER') {
+		const playerID = socket.handshake.query.customID;
+		socket.emit('getID', playerID)
+
+		if (!connected_player_list[playerID]) {
+			connected_player_list[playerID] = {};
+		}
+		//connected_player_list[playerID]['socket'] = socket;
+		connected_player_list[playerID]['socketID'] = socket.id;
+		connected_player_list[playerID]['role'] = socket.handshake.query.role;
+		connected_player_list[playerID]['customName'] = socket.handshake.query.customName;
+		connected_player_list[playerID]['customID'] = socket.handshake.query.customID;
+
+		socket.emit('receive-player-list', connected_player_list);
+	}
+
+	socket.on('send-player-list', () => {
+		console.log('Sending Player list to Admin')
+		console.log(connected_player_list)
+		socket.emit('receive-player-list', io.of('/').sockets);	//TODO:
+	})
 
 	socket.on('start-game', () => {
 		// Get player sockets
 		const players = [];
-		const customPlayers = [];
 		for (const [_, socket] of io.of('/').sockets) {
 			if (socket.handshake.query.role === 'PLAYER') {
 				players.push(socket);
-
-				let playerInfo = {};
-				playerInfo.socketID = socket.id;
-				playerInfo.customName = socket.handshake.query.customName;
-				customPlayers.push(playerInfo);
 			}
 		}
 		const playerIds = players.map(player => player.id);
@@ -121,7 +140,6 @@ io.on('connection', socket => {
 				}
 
 				const taskId = uuid();
-				playerTasks[player.id]['customName'] = player.handshake.query.customName;
 				playerTasks[player.id][taskId] = shuffledTasks.pop();
 
 				if (!impostors.includes(player.id)) {
@@ -138,15 +156,24 @@ io.on('connection', socket => {
 			}
 		}
 
+		io.emit('start-game');
+
 		emitTaskProgress();
 	});
 
 	socket.on('report', () => {
-		io.emit('play-meeting');
+		log('Player Reported: Emergency Meeting started!')
+		io.emit('play-report');
 	});
 
 	socket.on('emergency-meeting', () => {
+		log('Emergency Meeting started!');
 		io.emit('play-meeting');
+	});
+
+	socket.on('stop-meeting', () => {
+		log('Admin: Emergency Meeting stopped!')
+		io.emit('stop-meeting');
 	});
 
 	socket.on('task-complete', taskId => {
@@ -165,15 +192,38 @@ io.on('connection', socket => {
 	});
 });
 
+function emitPlayerList() {
+	console.log('Emitting Player List')
+	console.log(player_list)
+	io.emit('receive-player-list', player_list);
+}
+
 function emitTaskProgress() {
 	const tasks = Object.values(taskProgress);
 	const completed = tasks.filter(task => task).length;
 	const total = completed / tasks.length;
-	console.log(`Emitting Progress to: ${total}`)
+	log(`Emitting Progress to: ${total}%`)
 	io.emit('progress', total);
 
 	if (total === 1) {
 		io.emit('play-win');
+	}
+}
+
+function log(message) {
+	let d, hours ,minutes, seconds;
+	if ('undefined' !== typeof console && LOGGING) {
+		d = new Date();
+		hours = d.getHours();
+		if (hours < 10)
+			hours = "0" + hours;
+		minutes = d.getMinutes();
+		if (minutes < 10)
+			minutes = "0" + minutes;
+		seconds = d.getSeconds();
+		if (seconds < 10)
+			seconds = "0" + seconds;
+		console.log(hours + ':' + minutes + ':' + seconds + ' | AMONG US > ' + message);
 	}
 }
 
