@@ -18,10 +18,10 @@ img {
 	width: 100%;
 }
 
-.music-button-enabled {
+.enabled {
 	display: block;
 }
 
-.music-button-disabled {
+.disabled {
 	display: none;
 }

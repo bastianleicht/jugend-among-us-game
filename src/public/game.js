@@ -1,54 +1,123 @@
-const socket = io({
-	query: {
-		role: 'PLAYER'
-	}
-});
-
-*/
+/*
+ * Copyright (c) 2021, Bastian Leicht <mail@bastainleicht.de>
+ *
+ * PDX-License-Identifier: BSD-2-Clause
+ */
 const DEBUG = true;
 
-const socket = io({
-	query: {
-		role: 'PLAYER',
-		customName: localStorage.getItem('customName')
-	}
-});
-
-const customName$ = localStorage.getItem('customName');
-
-if(customName$ === null) {
-	//localStorage.setItem('customName', 'Steve')
+/**
+ * 	Loading customID and customName.
+ * 	If there are none they get generated.
+ */
+if(localStorage.getItem('customID') === null) {
+	const id = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+	localStorage.setItem('customID', id);
+	log(`Generated and saved customID: ${id}`);
 }
 
-log(`Got customName: ${customName$}`)
+if(localStorage.getItem('customName') === null) {
+	const playerName = 'Player' + Math.floor(Math.random() * 50 + 1);
+	localStorage.setItem('customName', playerName)
+	log(`Generated and saved customName: ${playerName}`);
+}
 
+let impostor$ = false;
+let killed$ = false;
+
+//	Custom Settings
+const save_customID$ = localStorage.getItem('customID');
+const save_customName$ = localStorage.getItem('customName');
+//	Game Imaged
+const emergencyImage$ = document.querySelector('#emergency-meeting-image');
+const deadBodyImage$ = document.querySelector('#dead-body-image');
+// Player Control
+const playerControls$ = document.querySelector('#player-controls');
 const emergencyMeeting$ = document.querySelector('#emergency-meeting');
+const report$ = document.querySelector('#report');
+//	Impostor Control
+const impostorControls$ = document.querySelector('#impostor-controls');
+const killPlayer$ = document.querySelector('#kill-player');
+const sabotage$ = document.querySelector('#sabotage');
+// Music stuff
 const enableMusic$ = document.querySelector('#enable-music');
 const disableMusic$ = document.querySelector('#disable-music');
+//	Task Progress Bar
 const progress$ = document.querySelector('#progress');
 const progressBar$ = document.querySelector('.progress-bar');
-const report$ = document.querySelector('#report');
+//	Everything else
 const tasks$ = document.querySelector('#tasks');
 const player_uuid$ = document.querySelector('#player-uuid');
 const player_custom_name$ = document.querySelector('#player-custom-name');
+
+/**
+ * Setting up the Websocket
+ */
+const socket = io({
+	query: {
+		role: 'PLAYER',
+		customID: save_customID$,
+		customName: save_customName$,
+	}
+});
+
+log(`Got customName: ${save_customName$}`)
+log(`Got customID: ${save_customID$}`)
+
+/**
+ *	Sounds
+ */
+const soundPlayer = new Audio();
+soundPlayer.play();
+const backgroundMusicPlayer = new Audio('/sounds/title-song.mp3');
+const SOUNDS = {
+	meeting: '/sounds/meeting.mp3',
+	sabotage: '/sounds/sabotage.mp3',
+	start: '/sounds/start.mp3',
+	sussyBoy: '/sounds/sussy-boy.mp3',
+	voteResult: '/sounds/vote-result.mp3',
+	youLose: '/sounds/you-lose.mp3',
+	youWin: '/sounds/you-win.mp3'
+};
 
 player_custom_name$.innerHTML = localStorage.getItem('customName')
 
 report$.addEventListener('click', () => {
 	socket.emit('report');
+	report$.disabled = true;
 });
 
 emergencyMeeting$.addEventListener('click', () => {
 	socket.emit('emergency-meeting');
-	emergencyMeeting$.style.display = 'none';
+	emergencyMeeting$.disabled = true;
+});
+
+enableMusic$.addEventListener('click', async () => {
+	log('Music Enabled')
+	enableMusic$.classList.remove('enabled');
+	enableMusic$.classList.add('disabled');
+	disableMusic$.classList.remove('disabled');
+	disableMusic$.classList.add('enabled');
+	await backgroundMusicPlayer.play();
+});
+
+disableMusic$.addEventListener('click', async () => {
+	log('Music Disabled')
+	enableMusic$.classList.remove('disabled');
+	enableMusic$.classList.add('enabled');
+	disableMusic$.classList.remove('enabled');
+	disableMusic$.classList.add('disabled');
+	await backgroundMusicPlayer.pause();
 });
 
 socket.on('getID', id => {
-	log(`Received Player ID: ${id}`)
+	log(`Received Player ID: ${id}`);
 	player_uuid$.innerHTML = id;
-})
+});
 
 socket.on('tasks', tasks => {
+	log('Game Started!');
+	log('Received Tasks');
+	console.log(tasks);
 	// Remove existing tasks
 	while (tasks$.firstChild) {
 		tasks$.removeChild(tasks$.firstChild);
@@ -82,6 +151,11 @@ socket.on('tasks', tasks => {
 
 socket.on('role', role => {
 	hideRole();
+	if(role === 'Impostor') {
+		impostor$ = true;
+		impostorControls$.classList.remove('disabled');
+		impostorControls$.classList.add('enabled');
+	}
 	const role$ = document.createElement('a');
 	role$.classList.add('role');
 	role$.appendChild(
@@ -92,11 +166,10 @@ socket.on('role', role => {
 	document.body.appendChild(role$);
 });
 
-function hideRole() {
-	document
-		.querySelectorAll('.role')
-		.forEach(element => (element.style.display = 'none'));
-}
+socket.on('start-game', async () => {
+	//TODO: Add waiting screen
+	await playSound(SOUNDS.start);
+});
 
 socket.on('progress', progress => {
 	let calc_progress = progress * 100
@@ -105,9 +178,43 @@ socket.on('progress', progress => {
 	progressBar$.style.width = `${progress * 100}%`;
 });
 
-/**
- * Sounds
- */
+socket.on('play-report', async  () => {
+	log('Player Report: Emergency Meeting Started!');
+	deadBodyImage$.classList.remove('disabled');
+	deadBodyImage$.classList.add('enabled');
+	playerControls$.classList.remove('enabled');
+	playerControls$.classList.add('disabled');
+	await playSound(SOUNDS.meeting);
+	await wait(2000);
+	await playSound(SOUNDS.sussyBoy);
+})
+
+socket.on('play-meeting', async () => {
+	log('Emergency Meeting Started!');
+	emergencyImage$.classList.remove('disabled');
+	emergencyImage$.classList.add('enabled');
+	playerControls$.classList.remove('enabled');
+	playerControls$.classList.add('disabled');
+	await playSound(SOUNDS.meeting);
+	await wait(2000);
+	await playSound(SOUNDS.sussyBoy);
+});
+
+socket.on('stop-meeting', async () => {
+	log('Emergency Meeting Ended (Stopped)!');
+	emergencyImage$.classList.add('disabled');
+	emergencyImage$.classList.remove('enabled');
+	deadBodyImage$.classList.add('disabled');
+	deadBodyImage$.classList.remove('enabled');
+	playerControls$.classList.add('enabled');
+	playerControls$.classList.remove('disabled');
+	emergencyMeeting$.disabled = false;
+	report$.disabled = false;
+})
+
+socket.on('play-win', async () => {
+	await playSound(SOUNDS.youWin);
+});
 
 async function wait(milliseconds) {
 	await new Promise(resolve => {
@@ -115,47 +222,9 @@ async function wait(milliseconds) {
 	});
 }
 
-const soundPlayer = new Audio();
-const backgroundMusicPlayer = new Audio('/sounds/title-song.mp3');
-const SOUNDS = {
-	meeting: '/sounds/meeting.mp3',
-	sabotage: '/sounds/sabotage.mp3',
-	start: '/sounds/start.mp3',
-	sussyBoy: '/sounds/sussy-boy.mp3',
-	voteResult: '/sounds/vote-result.mp3',
-	youLose: '/sounds/you-lose.mp3',
-	youWin: '/sounds/you-win.mp3'
-};
-
-socket.on('play-meeting', async () => {
-	await playSound(SOUNDS.meeting);
-	await wait(2000);
-	await playSound(SOUNDS.sussyBoy);
-});
-
-socket.on('play-win', async () => {
-	await playSound(SOUNDS.youWin);
-});
-
-soundPlayer.play();
-
-enableMusic$.addEventListener('click', async () => {
-	log('Music Enabled')
-	enableMusic$.classList.remove('music-button-enabled');
-	enableMusic$.classList.add('music-button-disabled');
-	disableMusic$.classList.remove('music-button-disabled');
-	disableMusic$.classList.add('music-button-enabled');
-	await backgroundMusicPlayer.play();
-});
-
-disableMusic$.addEventListener('click', async () => {
-	log('Music Disabled')
-	enableMusic$.classList.remove('music-button-disabled');
-	enableMusic$.classList.add('music-button-enabled');
-	disableMusic$.classList.remove('music-button-enabled');
-	disableMusic$.classList.add('music-button-disabled');
-	await backgroundMusicPlayer.pause();
-})
+function hideRole() {
+	document.querySelectorAll('.role').forEach(element => (element.style.display = 'none'));
+}
 
 async function playSound(url) {
 	soundPlayer.src = url;
