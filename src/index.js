@@ -66,6 +66,8 @@ app.use('/', express.static(path.join(__dirname, 'public')));
 
 const connected_player_list = [];
 const player_list = [];
+io.emit('load-game');
+
 io.on('connection', socket => {
 	player_list.push(socket)
 
@@ -86,6 +88,11 @@ io.on('connection', socket => {
 
 		socket.emit('receive-player-list', connected_player_list);
 	}
+
+	socket.on('stop-game', () => {
+		log('Admin: Stopped the Game (reloading everyone)')
+		io.emit('load-game');
+	});
 
 	socket.on('send-player-list', () => {
 		console.log('Sending Player list to Admin')
