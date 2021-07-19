@@ -24,16 +24,34 @@
 		<button id="disable-music" class="disabled">Disable Music</button>
 
 		<div id="emergency-meeting-image" class="disabled">
-			<span style="align-items: center; color: red; text-underline: red"><b>Return to the Meeting Room!</b></span>
-			<img src="/images/emergency-meeting.png" alt="Emergency Meeting started!">
+			<span class="d-flex justify-content-center" style="color: red;"><b>Return to the Meeting Room!</b></span>
+			<img class="d-flex justify-content-center" src="/images/emergency-meeting.png" alt="Emergency Meeting started!">
 		</div>
 
 		<div id="dead-body-image" class="disabled">
-			<span style="align-items: center; color: red; text-underline: red"><b>Return to the Meeting Room!</b></span>
-			<img src="/images/dead-body.png" alt="Dead Body found!">
+			<span class="d-flex justify-content-center" style="color: red;"><b>Return to the Meeting Room!</b></span>
+			<img class="d-flex justify-content-center" src="/images/dead-body.png" alt="Dead Body found!">
 		</div>
 
-		<div id="player-controls" class="enabled">
+		<div id="crew-win-image" class="disabled">
+			<span class="row d-flex justify-content-center">
+				<br>
+				The Crewmates have won the Game!
+				<b class="d-flex justify-content-center" style="color: red;">Return to the Meeting Room!</b>
+			</span>
+			<img class="d-flex justify-content-center" src="/images/crew-victory.png" alt="Dead Body found!">
+		</div>
+
+		<div id="game-loading" class="enabled">
+			<span class="d-flex justify-content-center mt-3 mb-4">Waiting for the Game to start!</span>
+			<div class="d-flex justify-content-center">
+				<div class="spinner-border">
+					<span class="sr-only"></span>
+				</div>
+			</div>
+		</div>
+
+		<div id="player-controls" class="disabled">
 			<button id="report">
 				<img src="/images/report.png" alt="Report"/>
 			</button>

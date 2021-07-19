@@ -27,6 +27,11 @@ stopMeeting$.addEventListener('click', () => {
 	socket.emit('stop-meeting');
 });
 
+stopGame$.addEventListener('click', () => {
+	log('Stopped the Game (reloading everyone)');
+	socket.emit('stop-game');
+});
+
 /**
  * Sounds
  */

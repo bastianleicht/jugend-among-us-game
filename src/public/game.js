@@ -27,7 +27,8 @@ let killed$ = false;
 //	Custom Settings
 const save_customID$ = localStorage.getItem('customID');
 const save_customName$ = localStorage.getItem('customName');
-//	Game Imaged
+//	Game Image & Loading
+const waitingPreloader$ = document.querySelector('#game-loading');
 const emergencyImage$ = document.querySelector('#emergency-meeting-image');
 const deadBodyImage$ = document.querySelector('#dead-body-image');
 // Player Control
@@ -101,13 +102,17 @@ enableMusic$.addEventListener('click', async () => {
 });
 
 disableMusic$.addEventListener('click', async () => {
-	log('Music Disabled')
+	log('Music Disabled');
 	enableMusic$.classList.remove('disabled');
 	enableMusic$.classList.add('enabled');
 	disableMusic$.classList.remove('enabled');
 	disableMusic$.classList.add('disabled');
 	await backgroundMusicPlayer.pause();
 });
+
+socket.on('load-game', async () => {
+	window.location.reload();
+})
 
 socket.on('getID', id => {
 	log(`Received Player ID: ${id}`);
@@ -168,6 +173,13 @@ socket.on('role', role => {
 
 socket.on('start-game', async () => {
 	//TODO: Add waiting screen
+	log('Game started!');
+	waitingPreloader$.classList.remove('enabled');
+	waitingPreloader$.classList.add('disabled');
+	log('Disabled waitingPreloader');
+	playerControls$.classList.remove('disabled');
+	playerControls$.classList.add('enabled');
+	log('Enabled playerControls')
 	await playSound(SOUNDS.start);
 });
 
