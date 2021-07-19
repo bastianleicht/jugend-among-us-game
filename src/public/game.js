@@ -20,9 +20,7 @@ if(localStorage.getItem('customName') === null) {
 	localStorage.setItem('customName', playerName)
 	log(`Generated and saved customName: ${playerName}`);
 }
-
 let impostor$ = false;
-let killed$ = false;
 
 //	Custom Settings
 const save_customID$ = localStorage.getItem('customID');
@@ -31,6 +29,7 @@ const save_customName$ = localStorage.getItem('customName');
 const waitingPreloader$ = document.querySelector('#game-loading');
 const emergencyImage$ = document.querySelector('#emergency-meeting-image');
 const deadBodyImage$ = document.querySelector('#dead-body-image');
+const crewVictoryImage$ = document.querySelector('#crew-win-image');
 // Player Control
 const playerControls$ = document.querySelector('#player-controls');
 const emergencyMeeting$ = document.querySelector('#emergency-meeting');
@@ -120,7 +119,6 @@ socket.on('getID', id => {
 });
 
 socket.on('tasks', tasks => {
-	log('Game Started!');
 	log('Received Tasks');
 	console.log(tasks);
 	// Remove existing tasks
@@ -224,7 +222,11 @@ socket.on('stop-meeting', async () => {
 	report$.disabled = false;
 })
 
-socket.on('play-win', async () => {
+socket.on('crew-win', async () => {
+	crewVictoryImage$.classList.remove('disabled');
+	crewVictoryImage$.classList.add('enabled');
+	playerControls$.classList.remove('enabled');
+	playerControls$.classList.add('disabled');
 	await playSound(SOUNDS.youWin);
 });
 

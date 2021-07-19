@@ -206,7 +206,7 @@ function emitTaskProgress() {
 	io.emit('progress', total);
 
 	if (total === 1) {
-		io.emit('play-win');
+		io.emit('crew-win');
 	}
 }
 
