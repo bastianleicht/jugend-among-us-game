@@ -15,6 +15,7 @@ const LOGGING = true;
 const PORT = 3000;
 const N_TASKS = 5;
 const N_IMPOSTORS = 1;
+const N_TIME = 10;		//	In Minutes
 
 const app = express();
 const server = http.createServer(app);
@@ -75,7 +76,7 @@ io.on('connection', socket => {
 
 	if(socket.handshake.query.role === 'PLAYER') {
 		const playerID = socket.handshake.query.customID;
-		socket.emit('getID', playerID)
+		socket.emit('getID', playerID);
 
 		if (!connected_player_list[playerID]) {
 			connected_player_list[playerID] = {};
@@ -109,7 +110,7 @@ io.on('connection', socket => {
 			}
 		}
 		const playerIds = players.map(player => player.id);
-		console.log('player sockets', players.length);
+		log('Player Sockets: ', players.length);
 		console.log(playerIds)		//TODO: Remove!
 
 		// Assign impostors
@@ -119,10 +120,10 @@ io.on('connection', socket => {
 				socket.emit('getID', id)
 				if (impostors.includes(id)) {
 					socket.emit('role', 'Impostor');
-					console.log(`${id} (${socket.handshake.query.customName}) is Impostor!`);
+					log(`${socket.handshake.query.customName} (${id}) is Impostor!`);
 				} else {
 					socket.emit('role', 'Crewmate');
-					console.log(`${id} (${socket.handshake.query.customName}) is Crewmate!`);
+					console.log(`${socket.handshake.query.customName} (${id}) is Crewmate!`);
 				}
 			}
 		}
@@ -184,7 +185,7 @@ io.on('connection', socket => {
 	});
 
 	socket.on('task-complete', taskId => {
-		console.log(`task-complete: ${taskId}`)
+		log(`Task completed: ${taskId}`)
 		if (typeof taskProgress[taskId] === 'boolean') {
 			taskProgress[taskId] = true;
 		}
