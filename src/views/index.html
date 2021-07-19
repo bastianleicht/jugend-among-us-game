@@ -15,7 +15,9 @@
 		<link rel="stylesheet" href="/styles.css" />
 	</head>
 	<body>
-		<h1>Among Us</h1>
+	<div class="header">
+		<h1 class="d-flex justify-content-center">Among Us</h1>
+	</div>
 		<small>Player ID: <span id="player-uuid"></span></small>
 		<br>
 		<small>Custom Name: <span id="player-custom-name"></span></small>
@@ -39,7 +41,16 @@
 				The Crewmates have won the Game!
 				<b class="d-flex justify-content-center" style="color: red;">Return to the Meeting Room!</b>
 			</span>
-			<img class="d-flex justify-content-center" src="/images/crew-victory.png" alt="Dead Body found!">
+			<img class="d-flex justify-content-center" src="/images/crew-victory.png" alt="The Crewmates have won!">
+		</div>
+
+		<div id="impostor-win-image" class="disabled">
+			<span class="row d-flex justify-content-center">
+				<br>
+				The Impostor(s) have won the Game!
+				<b class="d-flex justify-content-center" style="color: red;">Return to the Meeting Room!</b>
+			</span>
+			<img class="d-flex justify-content-center" src="/images/impostor-victory.png" alt="The Impostor(s) have won!">
 		</div>
 
 		<div id="game-loading" class="enabled">
@@ -73,7 +84,7 @@
 				<div class="progress-bar progress-bar-striped bg-success" role="progressbar" title="Task Progress" style="width: 0%"></div>
 			</div>
 
-			<h2>Tasks</h2>
+			<h2>Tasks:</h2>
 			<ol id="tasks"></ol>
 		</div>
 

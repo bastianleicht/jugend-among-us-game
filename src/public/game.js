@@ -30,6 +30,7 @@ const waitingPreloader$ = document.querySelector('#game-loading');
 const emergencyImage$ = document.querySelector('#emergency-meeting-image');
 const deadBodyImage$ = document.querySelector('#dead-body-image');
 const crewVictoryImage$ = document.querySelector('#crew-win-image');
+const impostorVictoryImage$ = document.querySelector('#impostor-win-image');
 // Player Control
 const playerControls$ = document.querySelector('#player-controls');
 const emergencyMeeting$ = document.querySelector('#emergency-meeting');
@@ -227,7 +228,23 @@ socket.on('crew-win', async () => {
 	crewVictoryImage$.classList.add('enabled');
 	playerControls$.classList.remove('enabled');
 	playerControls$.classList.add('disabled');
-	await playSound(SOUNDS.youWin);
+	if(impostor$ === true) {
+		await playSound(SOUNDS.youLose);
+	} else {
+		await playSound(SOUNDS.youWin);
+	}
+});
+
+socket.on('impostor-win', async () => {
+	impostorVictoryImage$.classList.remove('disabled');
+	impostorVictoryImage$.classList.add('enabled');
+	playerControls$.classList.remove('enabled');
+	playerControls$.classList.add('disabled');
+	if(impostor$ === true) {
+		await playSound(SOUNDS.youWin);
+	} else {
+		await playSound(SOUNDS.youLose);
+	}
 });
 
 async function wait(milliseconds) {

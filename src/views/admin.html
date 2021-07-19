@@ -3,7 +3,6 @@
   ~
   ~ PDX-License-Identifier: BSD-2-Clause
   -->
-
 <!DOCTYPE html>
 <html lang="en">
 	<head>
@@ -12,17 +11,53 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<title>Among Us</title>
 		<link rel="shortcut icon" type="image/png" sizes="16x16" href="/images/among-us.png">
+		<link rel="stylesheet" href="/assets/bootstrap.min.css">
 		<link rel="stylesheet" href="/admin.css" />
 	</head>
 	<body>
-		<h1>Admin</h1>
-		<button id="start-game">Start Game</button>
+		<div class="header">
+			<h1 class="d-flex justify-content-center">Among Us</h1>
+		</div>
 
-		<button id="stop-emergency-meeting">Stop Meeting</button>
-		<button id="stop-game">Stop Game</button>
+		<div id="admin-controls" class="d-flex justify-content-center">
+			<div class="row">
+				<div class="col-md-12">
+					<div class="row">
+						<div class="col-md-6">
+							Test:
+						</div>
+						<div class="col-md-6">
+							<button id="start-game">Start Game</button>
+						</div>
+					</div>
+				</div>
 
+				<div class="col-md-12">
+					<div class="row">
+						<div class="col-md-6">
+							Test:
+						</div>
+						<div class="col-md-6">
+							<button id="stop-emergency-meeting">Stop Meeting</button>
+						</div>
+					</div>
+				</div>
+
+				<div class="col-md-12">
+					<div class="row">
+						<div class="col-md-6">
+							Test:
+						</div>
+						<div class="col-md-6">
+							<button id="stop-game">Stop Game</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
 
 		<script src="/assets/socket.io.min.js"></script>
+		<script src="/assets/bootstrap.bundle.min.js"></script>
 		<script src="/admin.js"></script>
 	</body>
 </html>
