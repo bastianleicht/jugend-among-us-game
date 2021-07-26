@@ -121,20 +121,6 @@ io.on('connection', socket => {
 		log('Player Sockets: ', players.length);
 		console.log(playerIds);		//TODO: Remove!
 
-		// Assign impostors
-		const impostors = _.shuffle(playerIds).slice(0, N_IMPOSTORS);
-		for (const [id, socket] of io.of('/').sockets) {
-			if (socket.handshake.query.role === 'PLAYER') {
-				socket.emit('getID', id);
-				if (impostors.includes(id)) {
-					socket.emit('role', 'Impostor');
-					log(`${socket.handshake.query.customName} (${id}) is Impostor!`);
-				} else {
-					socket.emit('role', 'Crewmate');
-					console.log(`${socket.handshake.query.customName} (${id}) is Crewmate!`);
-				}
-			}
-		}
 
 		// Pool of tasks so they are distributed evenly
 		let shuffledTasks = [];
@@ -165,6 +151,21 @@ io.on('connection', socket => {
 		}
 
 		console.log('player tasks', playerTasks);
+
+		// Assign impostors
+		const impostors = _.shuffle(playerIds).slice(0, N_IMPOSTORS);
+		for (const [id, socket] of io.of('/').sockets) {
+			if (socket.handshake.query.role === 'PLAYER') {
+				socket.emit('getID', id);
+				if (impostors.includes(id)) {
+					socket.emit('role', 'Impostor');
+					log(`${socket.handshake.query.customName} (${id}) is Impostor!`);
+				} else {
+					socket.emit('role', 'Crewmate');
+					console.log(`${socket.handshake.query.customName} (${id}) is Crewmate!`);
+				}
+			}
+		}
 
 		for (const [id, socket] of io.of('/').sockets) {
 			if (playerIds.includes(id)) {
