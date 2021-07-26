@@ -16,9 +16,10 @@ if(localStorage.getItem('customID') === null) {
 }
 
 if(localStorage.getItem('customName') === null) {
-	const playerName = 'Player' + Math.floor(Math.random() * 50 + 1);
-	localStorage.setItem('customName', playerName)
-	log(`Generated and saved customName: ${playerName}`);
+	window.location.replace('/');
+	//const playerName = 'Player' + Math.floor(Math.random() * 50 + 1);
+	//localStorage.setItem('customName', playerName)
+	//log(`Generated and saved customName: ${playerName}`);
 }
 let impostor$ = false;
 let sabotage_running$ = false;
