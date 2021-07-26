@@ -104,9 +104,9 @@ io.on('connection', socket => {
 	});
 
 	socket.on('send-player-list', () => {
-		console.log('Sending Player list to Admin')
-		console.log(connected_player_list)
-		socket.emit('receive-player-list', io.of('/').sockets);	//TODO:
+		console.log('Sending Player list to Admin');
+		console.log(connected_player_list);
+		socket.emit('receive-player-list', io.of('/').sockets);	//TODO: SOCKETS!!!!!!!!!
 	})
 
 	socket.on('start-game', () => {
@@ -119,13 +119,13 @@ io.on('connection', socket => {
 		}
 		const playerIds = players.map(player => player.id);
 		log('Player Sockets: ', players.length);
-		console.log(playerIds)		//TODO: Remove!
+		console.log(playerIds);		//TODO: Remove!
 
 		// Assign impostors
 		const impostors = _.shuffle(playerIds).slice(0, N_IMPOSTORS);
 		for (const [id, socket] of io.of('/').sockets) {
 			if (socket.handshake.query.role === 'PLAYER') {
-				socket.emit('getID', id)
+				socket.emit('getID', id);
 				if (impostors.includes(id)) {
 					socket.emit('role', 'Impostor');
 					log(`${socket.handshake.query.customName} (${id}) is Impostor!`);
@@ -178,7 +178,7 @@ io.on('connection', socket => {
 	});
 
 	socket.on('report', () => {
-		log('Player Reported: Emergency Meeting started!')
+		log('Player Reported: Emergency Meeting started!');
 		io.emit('play-report');
 	});
 
@@ -188,7 +188,7 @@ io.on('connection', socket => {
 	});
 
 	socket.on('stop-meeting', () => {
-		log('Admin: Emergency Meeting stopped!')
+		log('Admin: Emergency Meeting stopped!');
 		io.emit('stop-meeting');
 	});
 
@@ -251,8 +251,8 @@ io.on('connection', socket => {
 });
 
 function emitPlayerList() {
-	console.log('Emitting Player List')
-	console.log(player_list)
+	console.log('Emitting Player List');
+	console.log(player_list);
 	io.emit('receive-player-list', player_list);
 }
 
@@ -260,10 +260,11 @@ function emitTaskProgress() {
 	const tasks = Object.values(taskProgress);
 	const completed = tasks.filter(task => task).length;
 	const total = completed / tasks.length;
-	log(`Emitting Progress to: ${total}%`)
+	log(`Emitting Progress to: ${total}%`);
 	io.emit('progress', total);
 
 	if (total === 1) {
+		log('The Crew won the game!');
 		io.emit('crew-win');
 	}
 }
