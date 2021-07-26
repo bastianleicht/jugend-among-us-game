@@ -192,6 +192,48 @@ io.on('connection', socket => {
 		io.emit('stop-meeting');
 	});
 
+	let sabotage_running = false;
+
+	function start_sabotage_timer() {
+		let sabotage_timer = setInterval(myClock, 1000);
+		let countdown = N_TIME_SABOTAGE;
+
+		function myClock() {
+			countdown = countdown - 1;
+			console.log(sabotage_running);
+			if(sabotage_running === true) {
+				log('Sabotage Timer: ' + countdown);
+				if (countdown === 0) {
+					clearInterval(sabotage_timer);
+					log('Sabotage Timer reached zero!');
+					log('Impostor(s) won the game!');
+					io.emit('impostor-win');
+				}
+			} else {
+				clearInterval(sabotage_timer);
+			}
+		}
+	}
+
+	socket.on('sabotage', () => {
+		log('Impostor: Sabotage started!');
+		sabotage_running = true;
+		//start_sabotage_timer();
+		io.emit('sabotage-start');
+	});
+
+	socket.on('stop-sabotage', () => {
+		log('Admin: Sabotage stopped!');
+		sabotage_running = false;
+		console.log(sabotage_running);
+		io.emit('sabotage-stop');
+	});
+
+	socket.on('admin-impostor-win', () => {
+		log('Admin: Emitting Impostor win!');
+		io.emit('impostor-win');
+	})
+
 	socket.on('task-complete', taskId => {
 		log(`Task completed: ${taskId}`)
 		if (typeof taskProgress[taskId] === 'boolean') {

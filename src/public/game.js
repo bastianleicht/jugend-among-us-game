@@ -221,6 +221,22 @@ socket.on('stop-meeting', async () => {
 	playerControls$.classList.remove('disabled');
 	emergencyMeeting$.disabled = false;
 	report$.disabled = false;
+});
+
+socket.on('sabotage-start', async () => {
+	log('Socket: Sabotage started!');
+	sabotageImage$.classList.remove('disabled');
+	sabotageImage$.classList.add('enabled');
+	playerControls$.classList.remove('enabled');
+	playerControls$.classList.add('disabled');
+});
+
+socket.on('sabotage-stop', async () => {
+	log('Socket: Sabotage stopped!');
+	sabotageImage$.classList.remove('enabled');
+	sabotageImage$.classList.add('disabled');
+	playerControls$.classList.remove('disabled');
+	playerControls$.classList.add('enabled');
 })
 
 socket.on('crew-win', async () => {
@@ -238,8 +254,13 @@ socket.on('crew-win', async () => {
 socket.on('impostor-win', async () => {
 	impostorVictoryImage$.classList.remove('disabled');
 	impostorVictoryImage$.classList.add('enabled');
-	playerControls$.classList.remove('enabled');
-	playerControls$.classList.add('disabled');
+	if(sabotage_running$ === true) {
+		sabotageImage$.classList.remove('enabled');
+		sabotageImage$.classList.add('disabled');
+	} else {
+		playerControls$.classList.remove('enabled');
+		playerControls$.classList.add('disabled');
+	}
 	if(impostor$ === true) {
 		await playSound(SOUNDS.youWin);
 	} else {

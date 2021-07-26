@@ -12,10 +12,13 @@ const socket = io({
 		customName: 'Admin',
 	}
 });
+const sabotageTimer$ = document.querySelector('#sabotage-timer');
 
 const startGame$ = document.querySelector('#start-game');
 const stopGame$ = document.querySelector('#stop-game');	//TODO:
 const stopMeeting$ = document.querySelector('#stop-emergency-meeting');
+const stopSabotage$ = document.querySelector('#stop-sabotage');
+const impostorWin = document.querySelector('#impostor-win');
 
 startGame$.addEventListener('click', () => {
 	log('Started the Game');
@@ -26,6 +29,16 @@ stopMeeting$.addEventListener('click', () => {
 	log('Stopped Emergency Meeting');
 	socket.emit('stop-meeting');
 });
+
+stopSabotage$.addEventListener('click', () => {
+	log('Stopped Sabotage');
+	socket.emit('stop-sabotage');
+});
+
+impostorWin.addEventListener('click', () => {
+	log('Emitting Impostor win');
+	socket.emit('admin-impostor-win');
+})
 
 stopGame$.addEventListener('click', () => {
 	log('Stopped the Game (reloading everyone)');
@@ -44,6 +57,18 @@ const SOUNDS = {
 	youLose: new Audio('/sounds/you-lose.mp3'),
 	youWin: new Audio('/sounds/you-win.mp3')
 };
+
+socket.on('sabotage-start', async  () => {
+	let sabotage_timer = setInterval(timer, 1000);
+	let countdown = 90;
+
+	function timer() {
+		countdown = countdown - 1;
+		sabotageTimer$.innerHTML = countdown;
+		if(countdown === 0) clearInterval(sabotage_timer);
+	}
+
+})
 
 socket.on('play-meeting', async () => {
 	log('An Emergency Meeting was started!')
