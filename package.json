@@ -7,6 +7,7 @@
 	"author": "Bastian Leicht <mail@bastianleicht.de> (https://bastianleicht.de)",
 	"scripts": {
 		"start": "node src/index.js",
+		"debug": "nodemon index.js",
 		"test": "echo \"Error: no test specified\" && exit 1"
 	},
 	"repository": {
