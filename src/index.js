@@ -22,20 +22,24 @@ const server = http.createServer(app);
 const io = new Server(server);
 
 const TASKS = [
-	"Do 10 reps of machine exercise (Joe's Gym)",
-	'Pour water (Kitchen)',
-	'Sink 1 ball (Billards table)',
-	"Flip water bottle (Michael's room)",
-	'Wash your hands (basement bathroom)',
-	'Wash your hands (1st floor bathroom)',
-	'Take elevator',
-	'Spin 8, 9, or 10 in Life game (Hearth room)',
-	'Beat Smash (Upstairs guest room)',
-	'Hit a layup (Basketball court)',
-	'Take photo (Green screen)',
-	'Bounce ping pong ball 10 times (front door)',
-	'Take a lap (Around pool)',
-	'Flip a pillow (Activity room)'
+	'Wurmloch Simulation',
+	'Suchmaschinen - Konfiguration',
+	'Porträt des Captains',
+	'Dateien ordnen',
+	'Sicherungen sortieren',
+	'Becherstapeln',
+	'Bottle Flip',
+	'Würfel den Code',
+	'Verkable das Schiff neu',
+	'Time to Kill - Sanduhr',
+	'Navigationsgerät neu konfigurieren',
+	'Passwort knacken',
+	'Besiege die K.I.',
+	'Kognitiver Test',
+	'Geheimbotschaften entschlüsseln',
+	'Funkkommunikation wiederherstellen',
+	'Crewliste',
+	'Raumschiff staubsaugen',
 ];
 
 let taskProgress = {};
