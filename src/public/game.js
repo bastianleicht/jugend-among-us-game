@@ -84,17 +84,33 @@ const SOUNDS = {
 };
 
 player_custom_name$.innerHTML = localStorage.getItem('customName')
+/**
+ * Player Controls
+ */
+emergencyMeeting$.addEventListener('click', () => {
+	socket.emit('emergency-meeting');
+	emergencyMeeting$.disabled = true;
+});
 
 report$.addEventListener('click', () => {
 	socket.emit('report');
 	report$.disabled = true;
 });
 
-emergencyMeeting$.addEventListener('click', () => {
-	socket.emit('emergency-meeting');
-	emergencyMeeting$.disabled = true;
+/**
+ * Impostor Controls
+ */
+
+sabotage$.addEventListener('click', () => {
+	socket.emit('sabotage');
+	sabotage$.disabled = true;
 });
 
+killPlayer$.disabled = true;
+
+/**
+ * Music Controls
+ */
 enableMusic$.addEventListener('click', async () => {
 	log('Music Enabled')
 	enableMusic$.classList.remove('enabled');
@@ -118,12 +134,12 @@ socket.on('load-game', async () => {
 })
 
 socket.on('getID', id => {
-	log(`Received Player ID: ${id}`);
+	log(`Socket: Received Player ID: ${id}`);
 	player_uuid$.innerHTML = id;
 });
 
 socket.on('tasks', tasks => {
-	log('Received Tasks');
+	log('Socket: Received Tasks from Socket');
 	console.log(tasks);
 	// Remove existing tasks
 	while (tasks$.firstChild) {
@@ -140,7 +156,7 @@ socket.on('tasks', tasks => {
 		// checkbox.value = "value";
 		// checkbox.id = "id";
 		checkbox$.onchange = event => {
-			log('Checkbox changed: ' + event.target.checked);
+			log('Socket: Checkbox changed: ' + event.target.checked);
 			if (event.target.checked) {
 				socket.emit('task-complete', taskId);
 			} else {
@@ -157,6 +173,7 @@ socket.on('tasks', tasks => {
 });
 
 socket.on('role', role => {
+	log(`Socket: Received role: ${role}`);
 	hideRole();
 	if(role === 'Impostor') {
 		impostor$ = true;
@@ -174,8 +191,7 @@ socket.on('role', role => {
 });
 
 socket.on('start-game', async () => {
-	//TODO: Add waiting screen
-	log('Game started!');
+	log('Socket: Game started!');
 	waitingPreloader$.classList.remove('enabled');
 	waitingPreloader$.classList.add('disabled');
 	log('Disabled waitingPreloader');
@@ -187,13 +203,13 @@ socket.on('start-game', async () => {
 
 socket.on('progress', progress => {
 	let calc_progress = progress * 100
-	log(`Updated Progress to: ${calc_progress}%`)
+	log(`Socket: Updated Progress to: ${calc_progress}%`)
 	progress$.innerHTML = (progress * 100).toFixed(0);
 	progressBar$.style.width = `${progress * 100}%`;
 });
 
 socket.on('play-report', async  () => {
-	log('Player Report: Emergency Meeting Started!');
+	log('Socket: Player Report -> Emergency Meeting Started!');
 	deadBodyImage$.classList.remove('disabled');
 	deadBodyImage$.classList.add('enabled');
 	playerControls$.classList.remove('enabled');
@@ -204,7 +220,7 @@ socket.on('play-report', async  () => {
 })
 
 socket.on('play-meeting', async () => {
-	log('Emergency Meeting Started!');
+	log('Socket: Emergency Meeting Started!');
 	emergencyImage$.classList.remove('disabled');
 	emergencyImage$.classList.add('enabled');
 	playerControls$.classList.remove('enabled');
@@ -215,7 +231,7 @@ socket.on('play-meeting', async () => {
 });
 
 socket.on('stop-meeting', async () => {
-	log('Emergency Meeting Ended (Stopped)!');
+	log('Socket: Emergency Meeting Ended (Stopped)!');
 	emergencyImage$.classList.add('disabled');
 	emergencyImage$.classList.remove('enabled');
 	deadBodyImage$.classList.add('disabled');
@@ -243,6 +259,7 @@ socket.on('sabotage-stop', async () => {
 })
 
 socket.on('crew-win', async () => {
+	log('Socket: The Crew won the Game!');
 	crewVictoryImage$.classList.remove('disabled');
 	crewVictoryImage$.classList.add('enabled');
 	playerControls$.classList.remove('enabled');
@@ -255,6 +272,7 @@ socket.on('crew-win', async () => {
 });
 
 socket.on('impostor-win', async () => {
+	log('Socket: The Impostor(s) won the Game!');
 	impostorVictoryImage$.classList.remove('disabled');
 	impostorVictoryImage$.classList.add('enabled');
 	if(sabotage_running$ === true) {
