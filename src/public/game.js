@@ -88,12 +88,12 @@ player_custom_name$.innerHTML = localStorage.getItem('customName')
  * Player Controls
  */
 emergencyMeeting$.addEventListener('click', () => {
-	socket.emit('emergency-meeting');
+	socket.emit('emergency-meeting', save_customName$);
 	emergencyMeeting$.disabled = true;
 });
 
 report$.addEventListener('click', () => {
-	socket.emit('report');
+	socket.emit('report', save_customName$);
 	report$.disabled = true;
 });
 
@@ -102,7 +102,7 @@ report$.addEventListener('click', () => {
  */
 
 sabotage$.addEventListener('click', () => {
-	socket.emit('sabotage');
+	socket.emit('sabotage', save_customName$);
 	sabotage$.disabled = true;
 });
 

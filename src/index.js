@@ -178,13 +178,13 @@ io.on('connection', socket => {
 		emitTaskProgress();
 	});
 
-	socket.on('report', () => {
-		log('Player Reported: Emergency Meeting started!');
+	socket.on('report', (customName) => {
+		log(`Player Reported: ${customName} -> Emergency Meeting started!`);
 		io.emit('play-report');
 	});
 
-	socket.on('emergency-meeting', () => {
-		log('Emergency Meeting started!');
+	socket.on('emergency-meeting', (customName) => {
+		log(`Emergency Meeting: ${customName} -> started the Meeting!`);
 		io.emit('play-meeting');
 	});
 
@@ -216,8 +216,8 @@ io.on('connection', socket => {
 		}
 	}
 
-	socket.on('sabotage', () => {
-		log('Impostor: Sabotage started!');
+	socket.on('sabotage', (customName) => {
+		log(`Impostor: ${customName} -> Sabotage started!`);
 		sabotage_running = true;
 		//start_sabotage_timer();
 		io.emit('sabotage-start');
