@@ -21,6 +21,7 @@ if(localStorage.getItem('customName') === null) {
 	log(`Generated and saved customName: ${playerName}`);
 }
 let impostor$ = false;
+let sabotage_running$ = false;
 
 //	Custom Settings
 const save_customID$ = localStorage.getItem('customID');
@@ -29,6 +30,7 @@ const save_customName$ = localStorage.getItem('customName');
 const waitingPreloader$ = document.querySelector('#game-loading');
 const emergencyImage$ = document.querySelector('#emergency-meeting-image');
 const deadBodyImage$ = document.querySelector('#dead-body-image');
+const sabotageImage$ = document.querySelector('#sabotage-image');
 const crewVictoryImage$ = document.querySelector('#crew-win-image');
 const impostorVictoryImage$ = document.querySelector('#impostor-win-image');
 // Player Control
