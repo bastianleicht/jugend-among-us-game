@@ -1,0 +1,33 @@
+<!--
+  ~ Copyright (c) 2021, Bastian Leicht <mail@bastainleicht.de>
+  ~
+  ~ PDX-License-Identifier: BSD-2-Clause
+  -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="author" content="Bastian Leicht">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Among Us</title>
+    <link rel="shortcut icon" type="image/png" sizes="16x16" href="/images/among-us.png">
+    <link rel="stylesheet" href="/assets/bootstrap.min.css">
+    <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+<div class="header">
+    <h1 class="d-flex justify-content-center">Among Us</h1>
+</div>
+
+<br>
+<h4>Set your custom Player Name:</h4>
+
+<div class="d-flex justify-content-center">
+    <input name="customName" id="customName" placeholder="Your Name">
+    <br>
+    <button onclick="setName();">Set Name</button>
+</div>
+
+<script src="/auth.js"></script>
+</body>
+</html>

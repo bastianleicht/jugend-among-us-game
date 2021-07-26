@@ -60,12 +60,16 @@ for (const name of Object.keys(nets)) {
 }
 
 app.get('/', (req, res) => {
-	res.sendFile(path.join(__dirname, 'views', 'index.html'));
+	res.sendFile(path.join(__dirname, 'views', 'auth.html'));
 });
 
 app.get('/admin', (req, res) => {
 	res.sendFile(path.join(__dirname, 'views', 'admin.html'));
 });
+
+app.get('/game', (req, res) => {
+	res.sendFile(path.join(__dirname, 'views', 'index.html'));
+})
 
 app.use('/', express.static(path.join(__dirname, 'public')));
 
