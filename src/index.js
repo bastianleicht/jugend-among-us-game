@@ -68,7 +68,7 @@ app.get('/admin', (req, res) => {
 });
 
 app.get('/game', (req, res) => {
-	res.sendFile(path.join(__dirname, 'views', 'index.html'));
+	res.sendFile(path.join(__dirname, 'views', 'game.html'));
 })
 
 app.use('/', express.static(path.join(__dirname, 'public')));
