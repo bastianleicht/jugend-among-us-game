@@ -39,6 +39,8 @@ const playerControls$ = document.querySelector('#player-controls');
 const emergencyMeeting$ = document.querySelector('#emergency-meeting');
 const report$ = document.querySelector('#report');
 //	Impostor Control
+const impostorHide$ = document.querySelector('#impostor-hide');
+const impostorHideButton$ = document.querySelector('#hide-impostor');
 const impostorControls$ = document.querySelector('#impostor-controls');
 const killPlayer$ = document.querySelector('#kill-player');
 const sabotage$ = document.querySelector('#sabotage');
@@ -100,6 +102,16 @@ report$.addEventListener('click', () => {
 /**
  * Impostor Controls
  */
+let impostor_hidden = false;
+impostorHideButton$.addEventListener('click', () => {
+	if(impostor_hidden === false) {
+		impostorHide$.classList.add('disabled');
+		impostor_hidden = true;
+	} else {
+		impostorHide$.classList.remove('disabled');
+		impostor_hidden = false;
+	}
+})
 
 sabotage$.addEventListener('click', () => {
 	socket.emit('sabotage', save_customName$);

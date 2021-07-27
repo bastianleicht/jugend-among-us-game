@@ -34,3 +34,11 @@ img {
 .disabled {
 	display: none;
 }
+
+.hide-impostor {
+	background: #A9A9A9;
+	color: red;
+	max-width: 10rem;
+	border-radius: 1rem;
+	border-color: red;
+}
