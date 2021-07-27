@@ -95,6 +95,11 @@
 			<ol id="tasks"></ol>
 		</div>
 
+	<script>
+		window.onbeforeunload = function() {
+			window.alert('If you refresh this page, you are getting kicked out of the game Session!');
+		}
+	</script>
 		<script src="/assets/socket.io.min.js"></script>
 		<script src="/assets/bootstrap.bundle.min.js"></script>
 		<script src="/game.js"></script>
