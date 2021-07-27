@@ -128,6 +128,9 @@ io.on('connection', socket => {
 		// Dictionary with key as socket.id and value is array of tasks
 		const playerTasks = {};
 
+		// Assign Impostors
+		const impostors = _.shuffle(playerIds).slice(0, N_IMPOSTORS);
+
 		// Assign tasks
 		taskProgress = {};
 		for (let i = 0; i < N_TASKS; i++) {
@@ -152,8 +155,16 @@ io.on('connection', socket => {
 
 		console.log('player tasks', playerTasks);
 
-		// Assign impostors
-		const impostors = _.shuffle(playerIds).slice(0, N_IMPOSTORS);
+		const ImpostorNames = [];
+		for (const [id, socket] of io.of('/').sockets) {
+			if(socket.handshake.query.role === 'PLAYER' && impostors.includes(id)) {
+				ImpostorNames.push(socket.handshake.query.customName);
+			}
+		}
+		io.emit('receive-impostors', ImpostorNames);
+		console.log('Impostors: ' + ImpostorNames);
+
+		// Sending role to Players
 		for (const [id, socket] of io.of('/').sockets) {
 			if (socket.handshake.query.role === 'PLAYER') {
 				socket.emit('getID', id);
