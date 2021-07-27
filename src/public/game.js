@@ -184,19 +184,29 @@ socket.on('tasks', tasks => {
 	}
 });
 
+let impostor_player
+socket.on('receive-impostors', impostors => {
+	impostor_player = impostors;
+});
+
 socket.on('role', role => {
 	log(`Socket: Received role: ${role}`);
 	hideRole();
+	const role$ = document.createElement('a');
+	role$.classList.add('role');
 	if(role === 'Impostor') {
 		impostor$ = true;
 		impostorControls$.classList.remove('disabled');
 		impostorControls$.classList.add('enabled');
+		impostorHideButton$.classList.remove('disabled');
+		role$.appendChild(
+			document.createTextNode(`You are a(n) ${role} with ${impostor_player.toString()}. Click to dismiss.`)
+		);
+	} else {
+		role$.appendChild(
+			document.createTextNode(`You are a(n) ${role}. Click to dismiss.`)
+		);
 	}
-	const role$ = document.createElement('a');
-	role$.classList.add('role');
-	role$.appendChild(
-		document.createTextNode(`You are a(n) ${role}. Click to dismiss.`)
-	);
 	role$.onclick = () => hideRole();
 
 	document.body.appendChild(role$);
