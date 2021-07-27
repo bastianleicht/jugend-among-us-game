@@ -13,7 +13,7 @@ h1 {
 	font-family: 'Comic Sans MS', serif;
 }
 
-button {
+.control-button {
 	width: 100%;
 	max-width: 10rem;
 	border-radius: 1rem;

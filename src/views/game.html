@@ -12,7 +12,7 @@
 		<title>Among Us</title>
 		<link rel="shortcut icon" type="image/png" sizes="16x16" href="/images/among-us.png">
 		<link rel="stylesheet" href="/assets/bootstrap.min.css">
-		<link rel="stylesheet" href="/styles.css" />
+		<link rel="stylesheet" href="/game.css" />
 	</head>
 	<body>
 	<div class="header">
@@ -22,8 +22,8 @@
 		<br>
 		<small>Custom Name: <span id="player-custom-name"></span></small>
 		<br>
-		<button id="enable-music" class="enabled">Enable Music</button>
-		<button id="disable-music" class="disabled">Disable Music</button>
+		<button id="enable-music" class="control-button enabled">Enable Music</button>
+		<button id="disable-music" class="control-button disabled">Disable Music</button>
 
 		<div id="emergency-meeting-image" class="disabled">
 			<span class="d-flex justify-content-center" style="color: red;"><b>Return to the Meeting Room!</b></span>
@@ -68,20 +68,22 @@
 		</div>
 
 		<div id="player-controls" class="disabled">
-			<button id="report">
+			<button id="report" class="control-button">
 				<img src="/images/report.png" alt="Report"/>
 			</button>
-			<button id="emergency-meeting">
+			<button id="emergency-meeting" class="control-button">
 				<img src="/images/emergency_button.png" alt="Emergency Meeting"/>
 			</button>
 
 			<div id="impostor-controls" class="disabled">
-				<button id="kill-player">
-					<img src="/images/kill.png" alt="Kill Player"/>
-				</button>
-				<button id="sabotage">
-					<img src="/images/sabotage.png" alt="Emergency Meeting"/>
-				</button>
+				<div id="impostor-hide" class="enabled">
+					<button id="kill-player" class="control-button">
+						<img src="/images/kill.png" alt="Kill Player"/>
+					</button>
+					<button id="sabotage" class="control-button">
+						<img src="/images/sabotage.png" alt="Emergency Meeting"/>
+					</button>
+				</div>
 			</div>
 
 			<p>Progress is <span id="progress">0</span>% complete</p>
