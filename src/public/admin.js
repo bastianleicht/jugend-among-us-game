@@ -12,8 +12,13 @@ const socket = io({
 		customName: 'Admin',
 	}
 });
+//	Sabotage
+const sabotageInfo$ = document.querySelector('#info-sabotage');
 const sabotageTimer$ = document.querySelector('#sabotage-timer');
-
+//	Meeting
+const meetingInfo$ = document.querySelector('#info-meeting');
+const meetingTimer$ = document.querySelector('#meeting-timer');
+//	Game Controls
 const startGame$ = document.querySelector('#start-game');
 const stopGame$ = document.querySelector('#stop-game');	//TODO:
 const stopMeeting$ = document.querySelector('#stop-emergency-meeting');
@@ -32,11 +37,13 @@ startGame$.addEventListener('click', () => {
 stopMeeting$.addEventListener('click', () => {
 	log('Stopped Emergency Meeting');
 	socket.emit('stop-meeting');
+	meetingInfo$.classList.add('disabled');
 });
 
 stopSabotage$.addEventListener('click', () => {
 	log('Stopped Sabotage');
 	socket.emit('stop-sabotage');
+	sabotageInfo$.classList.add('disabled');
 });
 
 impostorWin.addEventListener('click', () => {
@@ -81,6 +88,7 @@ socket.on('admin-receive-single-log', log_message => {
 });
 
 socket.on('sabotage-start', async  () => {
+	sabotageInfo$.classList.remove('disabled');
 	let sabotage_timer = setInterval(timer, 1000);
 	let countdown = 90;
 
@@ -89,11 +97,20 @@ socket.on('sabotage-start', async  () => {
 		sabotageTimer$.innerHTML = countdown;
 		if(countdown === 0) clearInterval(sabotage_timer);
 	}
-
-})
+});
 
 socket.on('play-meeting', async () => {
 	log('An Emergency Meeting was started!')
+	meetingInfo$.classList.remove('disabled');
+	let meeting_timer = setInterval(timer, 1000);
+	let countdown = 150;
+
+	function timer() {
+		countdown = countdown - 1;
+		meetingTimer$.innerHTML = countdown;
+		if(countdown === 0) clearInterval(meeting_timer);
+	}
+
 	await SOUNDS.meeting.play();
 	await wait(2000);
 	await SOUNDS.sussyBoy.play();
