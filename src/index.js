@@ -14,8 +14,13 @@ const { v4: uuid } = require('uuid');
 const LOGGING = true;
 const PORT = 3000;
 const N_TASKS = 5;
-const N_IMPOSTORS = 1;
-const N_TIME = 10;		//	In Minutes
+const N_IMPOSTORS = 3;
+const N_TIME = 10;		//	In Minutes	//TODO: Not Implemented!
+const N_TIME_SABOTAGE = 90;
+
+let TEMP_admin_log = [];
+TEMP_admin_log.push('Among Us Web Edition');
+let TEMP_admin_received_log = [];
 
 const app = express();
 const server = http.createServer(app);
@@ -97,6 +102,12 @@ io.on('connection', socket => {
 
 		socket.emit('receive-player-list', connected_player_list);
 	}
+
+	socket.on('admin-request-log', socketID => {
+		TEMP_admin_received_log.push(socketID);
+		console.log(TEMP_admin_log);
+		io.emit('admin-receive-log', TEMP_admin_log);
+	});
 
 	socket.on('stop-game', () => {
 		log('Admin: Stopped the Game (reloading everyone)')
@@ -282,7 +293,7 @@ function emitTaskProgress() {
 }
 
 function log(message) {
-	let d, hours ,minutes, seconds;
+	let d, hours ,minutes, seconds, log_message;
 	if ('undefined' !== typeof console && LOGGING) {
 		d = new Date();
 		hours = d.getHours();
@@ -294,7 +305,10 @@ function log(message) {
 		seconds = d.getSeconds();
 		if (seconds < 10)
 			seconds = "0" + seconds;
-		console.log(hours + ':' + minutes + ':' + seconds + ' | AMONG US > ' + message);
+		log_message = hours + ':' + minutes + ':' + seconds + ' | AMONG US > ' + message;
+		io.emit('admin-receive-single-log', log_message);
+		TEMP_admin_log.push(log_message);
+		console.log(log_message);
 	}
 }
 

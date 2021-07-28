@@ -20,6 +20,10 @@ const stopMeeting$ = document.querySelector('#stop-emergency-meeting');
 const stopSabotage$ = document.querySelector('#stop-sabotage');
 const impostorWin = document.querySelector('#impostor-win');
 
+const adminConsole$ = document.querySelector('#admin-console');
+
+let TEMP_core_log;
+
 startGame$.addEventListener('click', () => {
 	log('Started the Game');
 	socket.emit('start-game');
@@ -57,6 +61,24 @@ const SOUNDS = {
 	youLose: new Audio('/sounds/you-lose.mp3'),
 	youWin: new Audio('/sounds/you-win.mp3')
 };
+
+socket.emit('admin-request-log', socket.id);
+log('Requesting Log from Core');
+socket.on('admin-receive-log', core_log => {
+	TEMP_core_log = core_log;
+	log('Socket: Received Core Log: ');
+	console.log(TEMP_core_log);
+	adminConsole$.innerHTML = core_log.join('\n');
+});
+
+socket.on('admin-receive-single-log', log_message => {
+	if(TEMP_core_log) {
+		log(`Socket: Received log message from Core: \n"${log_message}"`);
+		TEMP_core_log.push(log_message);
+		adminConsole$.append('\n' + log_message);
+		adminConsole$.scrollTop = adminConsole$.scrollHeight;
+	}
+});
 
 socket.on('sabotage-start', async  () => {
 	let sabotage_timer = setInterval(timer, 1000);
