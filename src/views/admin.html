@@ -7,83 +7,101 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 		<meta name="author" content="Bastian Leicht">
-		<meta name="viewport" content="width=device-width, initial-scale=1">
-		<title>Among Us</title>
+		<title>Among Us | Admin</title>
+
 		<link rel="shortcut icon" type="image/png" sizes="16x16" href="/images/among-us.png">
 		<link rel="stylesheet" href="/assets/bootstrap.min.css">
-		<link rel="stylesheet" href="/admin.css" />
+		<link href="/admin.css" rel="stylesheet">
 	</head>
 	<body>
-		<div class="header">
-			<h1 class="d-flex justify-content-center">Among Us</h1>
-		</div>
-
-		<div class="d-flex justify-content-center">
-			<span>Sabotage Timer: <span id="sabotage-timer">0</span> Seconds</span>
-		</div>
-
-		<div id="admin-controls" class="d-flex justify-content-center">
-			<div class="row">
-				<div class="col-md-12">
-					<div class="row">
-						<div class="col-md-6">
-							Test:
-						</div>
-						<div class="col-md-6">
-							<button id="start-game">Start Game</button>
-						</div>
-					</div>
-				</div>
-
-				<div class="col-md-12">
-					<div class="row">
-						<div class="col-md-6">
-							Test:
-						</div>
-						<div class="col-md-6">
-							<button id="stop-emergency-meeting">Stop Meeting</button>
-						</div>
-					</div>
-				</div>
-
-				<div class="col-md-12">
-					<div class="row">
-						<div class="col-md-6">
-							Test:
-						</div>
-						<div class="col-md-6">
-							<button id="stop-sabotage">Stop Sabotage</button>
-						</div>
-					</div>
-				</div>
-
-				<div class="col-md-12">
-					<div class="row">
-						<div class="col-md-6">
-							Test:
-						</div>
-						<div class="col-md-6">
-							<button id="impostor-win">Emit Impostor(s) win</button>
-						</div>
-					</div>
-				</div>
-
-				<div class="col-md-12">
-					<div class="row">
-						<div class="col-md-6">
-							Test:
-						</div>
-						<div class="col-md-6">
-							<button id="stop-game">Stop Game</button>
-						</div>
-					</div>
-				</div>
+	<main role="main" class="container">
+		<div class="d-flex align-items-center p-3 my-3 text-white-50 bg-purple rounded box-shadow">
+			<img class="mr-3" src="/images/among-us.png" alt="" width="48" height="48">
+			<div class="lh-100">
+				<h6 class="mb-0 text-white lh-100">Among Us Web edition</h6>
+				<small>by <a href="https://bastianleicht.de">Bastian Leicht</a></small>
 			</div>
 		</div>
 
-		<script src="/assets/socket.io.min.js"></script>
-		<script src="/assets/bootstrap.bundle.min.js"></script>
-		<script src="/admin.js"></script>
+		<div class="my-3 p-3 bg-white rounded box-shadow">
+			<h6 class="border-bottom border-gray pb-2 mb-0">Admin Controls</h6>
+
+			<span>Connected Players: <span id="connected-player-count" style="color: green">0</span></span>
+			<span id="info-sabotage" class="disabled">Sabotage Timer: <span id="sabotage-timer">0</span> Seconds</span>
+			<span id="info-meeting" class="disabled">Meeting Timer: <span id="meeting-timer">0</span> Seconds</span>
+
+			<div class="media text-muted">
+				<div class="d-flex align-items-center media-body mb-0 border-bottom border-gray">
+					<button id="start-game" class="btn btn-success admin-button">Start Game</button>
+					<div style="margin-left: 10px;">
+						<p class="small lh-125 pt-3">
+							This starts the Game. Everyone that is not Connected won't be able to play!
+						</p>
+					</div>
+				</div>
+			</div>
+
+			<div class="media text-muted">
+				<div class="d-flex align-items-center media-body mb-0 border-bottom border-gray">
+					<button id="stop-game" class="btn btn-danger admin-button">Stop Game</button>
+					<div style="margin-left: 10px;">
+						<p class="small lh-125 pt-3">
+							Ends the game. Forces a reload on all connected players.
+						</p>
+					</div>
+				</div>
+			</div>
+
+			<div class="media text-muted">
+				<div class="d-flex align-items-center media-body mb-0 border-bottom border-gray">
+					<button id="stop-emergency-meeting" class="btn btn-warning admin-button">Stop Meeting</button>
+					<div style="margin-left: 10px;">
+						<p class="small lh-125 pt-3">
+							Stop's a Meeting. This can also be a player report.
+						</p>
+					</div>
+				</div>
+			</div>
+
+			<div class="media text-muted">
+				<div class="d-flex align-items-center media-body mb-0 border-bottom border-gray">
+					<button id="stop-sabotage" class="btn btn-warning admin-button">Stop Sabotage</button>
+					<div style="margin-left: 10px;">
+						<p class="small lh-125 pt-3">
+							Manually stops the Sabotage
+						</p>
+					</div>
+				</div>
+			</div>
+
+			<div class="media text-muted">
+				<div class="d-flex align-items-center media-body mb-0 border-bottom border-gray">
+					<button id="impostor-win" class="btn btn-warning admin-button">Impostor Win</button>
+					<div style="margin-left: 10px;">
+						<p class="small lh-125 pt-3">
+							Display a Impostor Win (Made for Sabotage)
+						</p>
+					</div>
+				</div>
+			</div>
+
+		</div>
+
+		<div class="my-3 p-3 bg-white rounded box-shadow">
+			<h6 class="border-bottom border-gray pb-2 mb-0">Game Log</h6>
+
+			<div class="media text-muted pt-3">
+				<textarea id="admin-console" style="width: 100%; height: 10rem; max-height: 20rem; resize: none" readonly></textarea>
+				<input placeholder="Command" disabled style="width: 100%">
+			</div>
+		</div>
+	</main>
+
+	<script src="/assets/socket.io.min.js"></script>
+	<script src="/assets/bootstrap.bundle.min.js"></script>
+	<script src="/assets/jquery-3.2.1.slim.min.js"></script>
+	<script src="/admin.js"></script>
 	</body>
 </html>
