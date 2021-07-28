@@ -12,7 +12,7 @@ const { Server } = require('socket.io');
 const { v4: uuid } = require('uuid');
 
 const LOGGING = true;
-const PORT = 3000;
+const PORT = 80;
 const N_TASKS = 5;
 const N_IMPOSTORS = 3;
 const N_TIME = 10;		//	In Minutes	//TODO: Not Implemented!
