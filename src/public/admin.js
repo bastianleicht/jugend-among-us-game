@@ -83,6 +83,7 @@ socket.on('admin-receive-log', core_log => {
 	log('Socket: Received Core Log: ');
 	console.log(TEMP_core_log);
 	adminConsole$.innerHTML = core_log.join('\n');
+	adminConsole$.scrollTop = adminConsole$.scrollHeight;
 });
 //	Receive Single Log messages
 socket.on('admin-receive-single-log', log_message => {
