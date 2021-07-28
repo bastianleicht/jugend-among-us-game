@@ -7,27 +7,42 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="author" content="Bastian Leicht">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Among Us</title>
+    <title>Among Us | Auth</title>
+
     <link rel="shortcut icon" type="image/png" sizes="16x16" href="/images/among-us.png">
     <link rel="stylesheet" href="/assets/bootstrap.min.css">
-    <link rel="stylesheet" href="/game.css" />
+    <link href="/admin.css" rel="stylesheet">
 </head>
+
 <body>
-<div class="header">
-    <h1 class="d-flex justify-content-center">Among Us</h1>
-</div>
+    <main role="main" class="container">
+        <div class="d-flex align-items-center p-3 my-3 text-white-50 bg-purple rounded box-shadow">
+            <img class="mr-3" src="/images/among-us.png" alt="" width="48" height="48">
+            <div class="lh-100">
+                <h6 class="mb-0 text-white lh-100">Among Us Web edition</h6>
+                <small>by <a href="https://bastianleicht.de">Bastian Leicht</a></small>
+            </div>
+        </div>
 
-<br>
-<h4>Set your custom Player Name:</h4>
+        <div class="my-3 p-3 bg-white rounded box-shadow">
+            <h6 class="border-bottom border-gray pb-2 mb-0">Set your custom Player Name:</h6>
+            <div class="media text-muted">
+                <div class="d-flex align-items-center media-body mb-0 border-bottom border-gray">
+                    <div class="d-flex justify-content-center mt-3 mb-3">
+                        <input name="customName" id="customName" placeholder="Your Name">
+                        <br>
+                        <button class="btn btn-primary" onclick="setName();">Set Name</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
 
-<div class="d-flex justify-content-center">
-    <input name="customName" id="customName" placeholder="Your Name">
-    <br>
-    <button onclick="setName();">Set Name</button>
-</div>
-
-<script src="/auth.js"></script>
+    <script src="/assets/socket.io.min.js"></script>
+    <script src="/assets/bootstrap.bundle.min.js"></script>
+    <script src="/assets/jquery-3.2.1.slim.min.js"></script>
+    <script src="/auth.js"></script>
 </body>
 </html>
