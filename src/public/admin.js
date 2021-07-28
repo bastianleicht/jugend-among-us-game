@@ -20,18 +20,26 @@ const meetingInfo$ = document.querySelector('#info-meeting');
 const meetingTimer$ = document.querySelector('#meeting-timer');
 //	Game Controls
 const startGame$ = document.querySelector('#start-game');
-const stopGame$ = document.querySelector('#stop-game');	//TODO:
+const stopGame$ = document.querySelector('#stop-game');
 const stopMeeting$ = document.querySelector('#stop-emergency-meeting');
 const stopSabotage$ = document.querySelector('#stop-sabotage');
 const impostorWin = document.querySelector('#impostor-win');
-
+//	Admin Console
 const adminConsole$ = document.querySelector('#admin-console');
 
+/**
+ * Temporarily stored stuff
+ */
 let TEMP_core_log;
 
 startGame$.addEventListener('click', () => {
 	log('Started the Game');
 	socket.emit('start-game');
+});
+
+stopGame$.addEventListener('click', () => {
+	log('Stopped the Game (reloading everyone)');
+	socket.emit('stop-game');
 });
 
 stopMeeting$.addEventListener('click', () => {
@@ -49,11 +57,6 @@ stopSabotage$.addEventListener('click', () => {
 impostorWin.addEventListener('click', () => {
 	log('Emitting Impostor win');
 	socket.emit('admin-impostor-win');
-})
-
-stopGame$.addEventListener('click', () => {
-	log('Stopped the Game (reloading everyone)');
-	socket.emit('stop-game');
 });
 
 /**
@@ -69,6 +72,10 @@ const SOUNDS = {
 	youWin: new Audio('/sounds/you-win.mp3')
 };
 
+/**
+ * Game Log
+ */
+//	Request the whole log
 socket.emit('admin-request-log', socket.id);
 log('Requesting Log from Core');
 socket.on('admin-receive-log', core_log => {
@@ -77,7 +84,7 @@ socket.on('admin-receive-log', core_log => {
 	console.log(TEMP_core_log);
 	adminConsole$.innerHTML = core_log.join('\n');
 });
-
+//	Receive Single Log messages
 socket.on('admin-receive-single-log', log_message => {
 	if(TEMP_core_log) {
 		log(`Socket: Received log message from Core: \n"${log_message}"`);
@@ -114,10 +121,6 @@ socket.on('play-meeting', async () => {
 	await SOUNDS.meeting.play();
 	await wait(2000);
 	await SOUNDS.sussyBoy.play();
-});
-
-socket.on('play-win', async () => {
-	await SOUNDS.youWin.play();
 });
 
 async function wait(milliseconds) {
