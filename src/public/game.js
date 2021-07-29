@@ -90,6 +90,7 @@ if(GAME_AudioPlayer !== undefined) {
 	}, 3000);
 }
 const backgroundMusicPlayer = new Audio('/sounds/title-song.mp3');
+backgroundMusicPlayer.volume = 0.5;		//	Setting Volume to 50%
 const SOUNDS = {
 	meeting: '/sounds/meeting.mp3',
 	sabotage: '/sounds/sabotage.mp3',
