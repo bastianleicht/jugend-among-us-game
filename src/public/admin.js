@@ -31,6 +31,8 @@ const adminConsole$ = document.querySelector('#admin-console');
  * Temporarily stored stuff
  */
 let TEMP_core_log;
+let TEMP_meeting_timer;
+let TEMP_sabotage_timer;
 
 startGame$.addEventListener('click', () => {
 	log('Started the Game');
@@ -39,12 +41,15 @@ startGame$.addEventListener('click', () => {
 
 stopGame$.addEventListener('click', () => {
 	log('Stopped the Game (reloading everyone)');
+	clearInterval(TEMP_meeting_timer);
+	clearInterval(TEMP_sabotage_timer);
 	socket.emit('stop-game');
 });
 
 stopMeeting$.addEventListener('click', () => {
 	log('Stopped Emergency Meeting');
 	socket.emit('stop-meeting');
+	clearInterval(TEMP_meeting_timer);
 	meetingInfo$.classList.add('disabled');
 });
 
@@ -117,6 +122,24 @@ socket.on('play-meeting', async () => {
 		countdown = countdown - 1;
 		meetingTimer$.innerHTML = countdown;
 		if(countdown === 0) clearInterval(meeting_timer);
+	}
+
+	await SOUNDS.meeting.play();
+	await wait(2000);
+	await SOUNDS.sussyBoy.play();
+});
+
+socket.on('player-report', async () => {
+	log('A player was reported -> Emergency Meeting started!')
+	meetingInfo$.classList.remove('disabled');
+	TEMP_meeting_timer = setInterval(timer, 1000);
+	let countdown = 150;
+
+	function timer() {
+		countdown = countdown - 1;
+		meetingTimer$.innerHTML = countdown;
+		if(countdown <= 10) meetingTimer$.style.color = '#dc354';
+		if(countdown === 0) clearInterval(TEMP_meeting_timer);
 	}
 
 	await SOUNDS.meeting.play();
