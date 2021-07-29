@@ -66,8 +66,14 @@ const socket = io({
 	}
 });
 
-log(`Got customName: ${save_customName$}`)
-log(`Got customID: ${save_customID$}`)
+log(`Got customName: ${save_customName$}`);
+log(`Got customID: ${save_customID$}`);
+
+/**
+ * Temp Storage
+ */
+let TEMP_sabotage_cooldown;
+let TEMP_kill_cooldown;
 
 /**
  *	Sounds
@@ -116,6 +122,17 @@ impostorHideButton$.addEventListener('click', () => {
 sabotage$.addEventListener('click', () => {
 	socket.emit('sabotage', save_customName$);
 	sabotage$.disabled = true;
+	TEMP_sabotage_cooldown = setInterval(timer, 1000);
+	let countdown = 30;
+
+	function timer() {
+		countdown = countdown - 1;
+		//meetingTimer$.innerHTML = countdown;
+		if(countdown === 0) {
+			clearInterval(TEMP_sabotage_cooldown);
+			report$.disabled = false;
+		}
+	}
 });
 
 killPlayer$.disabled = true;
