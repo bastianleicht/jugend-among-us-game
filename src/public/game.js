@@ -77,7 +77,18 @@ let TEMP_kill_cooldown;
  *	Sounds
  */
 const soundPlayer = new Audio();
-soundPlayer.play();
+let GAME_AudioPlayer = soundPlayer.play();
+if(GAME_AudioPlayer !== undefined) {
+	let playAttempt = setInterval(() => {
+		soundPlayer.play()
+			.then(() => {
+				clearInterval(playAttempt);
+			})
+			.catch(error => {
+				console.log('AMONG US > Unable to play the Audio, Player has not interacted yet!');
+			});
+	}, 3000);
+}
 const backgroundMusicPlayer = new Audio('/sounds/title-song.mp3');
 const SOUNDS = {
 	meeting: '/sounds/meeting.mp3',
@@ -152,8 +163,9 @@ killPlayer$.addEventListener('click', () => {
 /**
  * Music Controls
  */
+backgroundMusicPlayer.loop = true;
 enableMusic$.addEventListener('click', async () => {
-	log('Music Enabled')
+	log('Music Enabled');
 	enableMusic$.classList.remove('enabled');
 	enableMusic$.classList.add('disabled');
 	disableMusic$.classList.remove('disabled');
