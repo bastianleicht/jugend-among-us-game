@@ -38,6 +38,7 @@ const report$ = document.querySelector('#report');
 //	Impostor Control
 const impostorHide$ = document.querySelector('#impostor-hide');
 const impostorHideButton$ = document.querySelector('#hide-impostor');
+const impostorTeammates$ = document.querySelector('#impostor-teammate-names');
 const impostorControls$ = document.querySelector('#impostor-controls');
 const killPlayer$ = document.querySelector('#kill-player');
 const sabotage$ = document.querySelector('#sabotage');
@@ -227,14 +228,12 @@ socket.on('role', role => {
 		impostorControls$.classList.remove('disabled');
 		impostorControls$.classList.add('enabled');
 		impostorHideButton$.classList.remove('disabled');
-		role$.appendChild(
-			document.createTextNode(`You are a(n) ${role} with ${impostor_player.toString()}. Click to dismiss.`)
-		);
-	} else {
-		role$.appendChild(
-			document.createTextNode(`You are a(n) ${role}. Click to dismiss.`)
-		);
+		log(`Socket: Received Impostor Teammates: ${impostor_player.join(', ')}`)
+		impostorTeammates$.innerHTML = impostor_player.join(', ');
 	}
+	role$.appendChild(
+		document.createTextNode(`You are a(n) ${role}. Click to dismiss.`)
+	);
 	role$.onclick = () => hideRole();
 
 	document.body.appendChild(role$);

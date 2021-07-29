@@ -9,30 +9,22 @@ body {
 	margin-right: 15px;
 }
 
-h1 {
-	font-family: 'Comic Sans MS', serif;
-}
+h1 { font-family: 'Comic Sans MS', serif; }
+
+
+img { width: 100%; }
+
+.header h1 { color: red; }
+
+.underline { text-decoration: underline; }
+
+.enabled { display: block; }
+.disabled { display: none; }
 
 .control-button {
 	width: 100%;
 	max-width: 10rem;
 	border-radius: 1rem;
-}
-
-img {
-	width: 100%;
-}
-
-.header h1 {
-	color: red;
-}
-
-.enabled {
-	display: block;
-}
-
-.disabled {
-	display: none;
 }
 
 .hide-impostor {
@@ -41,4 +33,9 @@ img {
 	max-width: 10rem;
 	border-radius: 1rem;
 	border-color: red;
+}
+
+.role {
+	color: #0d6efd;
+	text-decoration: underline;
 }
