@@ -42,11 +42,11 @@ const TASKS = [
 	'Navigationsgerät neu konfigurieren',
 	'Passwort knacken',
 	'Besiege die K.I.',
-	'Kognitiver Test',
-	'Geheimbotschaften entschlüsseln',
+	//'Kognitiver Test',
+	//'Geheimbotschaften entschlüsseln',
 	'Funkkommunikation wiederherstellen',
-	'Crewliste',
-	'Raumschiff staubsaugen',
+	//'Crewliste',
+	//'Raumschiff staubsaugen',
 ];
 
 let taskProgress = {};
@@ -315,7 +315,7 @@ function log(message) {
 		console.log(log_message);
 	}
 }
-
+TEMP_admin_log.push(`Server listening on ${network_results["WLAN"]}:${PORT}`);
 server.listen(PORT, () => console.log(`Server listening on ${network_results["WLAN"]}:${PORT}`));
 console.log(`Here is a link to the Admin panel: http://${network_results['WLAN']}:${PORT}/admin
-Here is a link for the Player's: http://${network_results['WLAN']}:${PORT}`)
+Here is a link for the Player's: http://${network_results['WLAN']}:${PORT}`);
