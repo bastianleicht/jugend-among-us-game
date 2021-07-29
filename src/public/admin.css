@@ -13,13 +13,9 @@ body {
 	padding-top: 1rem;
 }
 
-.admin-button {
-	width: 20%;
-}
+.admin-button { width: 20%; }
 
-.disabled {
-	display: none;
-}
+.disabled { display: none; }
 
 .text-white-50 { color: rgba(255, 255, 255, .5); }
 
@@ -28,6 +24,8 @@ body {
 .border-bottom { border-bottom: 1px solid #e5e5e5; }
 
 .box-shadow { box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05); }
+
+.underline { text-decoration: underline; }
 
 .lh-100 { line-height: 1; }
 .lh-125 { line-height: 1.25; }
