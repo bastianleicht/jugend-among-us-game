@@ -238,6 +238,10 @@ io.on('connection', socket => {
 		}
 	}
 
+	socket.on('player-killed', customName => {
+		log(`Impostor: ${customName} -> Killed a Player!`);
+	})
+
 	socket.on('sabotage', (customName) => {
 		log(`Impostor: ${customName} -> Sabotage started!`);
 		sabotage_running = true;
