@@ -56,6 +56,7 @@ stopMeeting$.addEventListener('click', () => {
 stopSabotage$.addEventListener('click', () => {
 	log('Stopped Sabotage');
 	socket.emit('stop-sabotage');
+	clearInterval(TEMP_sabotage_timer);
 	sabotageInfo$.classList.add('disabled');
 });
 
@@ -102,26 +103,26 @@ socket.on('admin-receive-single-log', log_message => {
 
 socket.on('sabotage-start', async  () => {
 	sabotageInfo$.classList.remove('disabled');
-	let sabotage_timer = setInterval(timer, 1000);
+	TEMP_sabotage_timer = setInterval(timer, 1000);
 	let countdown = 90;
 
 	function timer() {
 		countdown = countdown - 1;
 		sabotageTimer$.innerHTML = countdown;
-		if(countdown === 0) clearInterval(sabotage_timer);
+		if(countdown === 0) clearInterval(TEMP_sabotage_timer);
 	}
 });
 
 socket.on('play-meeting', async () => {
 	log('An Emergency Meeting was started!')
 	meetingInfo$.classList.remove('disabled');
-	let meeting_timer = setInterval(timer, 1000);
+	TEMP_meeting_timer = setInterval(timer, 1000);
 	let countdown = 150;
 
 	function timer() {
 		countdown = countdown - 1;
 		meetingTimer$.innerHTML = countdown;
-		if(countdown === 0) clearInterval(meeting_timer);
+		if(countdown === 0) clearInterval(TEMP_meeting_timer);
 	}
 
 	await SOUNDS.meeting.play();
