@@ -17,9 +17,6 @@ if(localStorage.getItem('customID') === null) {
 
 if(localStorage.getItem('customName') === null) {
 	window.location.replace('/');
-	//const playerName = 'Player' + Math.floor(Math.random() * 50 + 1);
-	//localStorage.setItem('customName', playerName)
-	//log(`Generated and saved customName: ${playerName}`);
 }
 let impostor$ = false;
 let sabotage_running$ = false;
@@ -135,7 +132,21 @@ sabotage$.addEventListener('click', () => {
 	}
 });
 
-killPlayer$.disabled = true;
+killPlayer$.addEventListener('click', () => {
+	socket.emit('player-killed', save_customName$);
+	killPlayer$.disabled = true;
+	TEMP_kill_cooldown = setInterval(timer, 1000);
+	let countdown = 30;
+
+	function timer() {
+		countdown = countdown - 1;
+		//meetingTimer$.innerHTML = countdown;
+		if(countdown === 0) {
+			clearInterval(TEMP_kill_cooldown);
+			killPlayer$.disabled = false;
+		}
+	}
+});
 
 /**
  * Music Controls
