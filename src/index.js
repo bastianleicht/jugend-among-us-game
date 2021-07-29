@@ -19,7 +19,9 @@ const N_TIME = 10;		//	In Minutes	//TODO: Not Implemented!
 const N_TIME_SABOTAGE = 90;
 
 let TEMP_admin_log = [];
-TEMP_admin_log.push('Among Us Web Edition');
+TEMP_admin_log.push('-> Among Us Web Edition');
+TEMP_admin_log.push('-> by Bastian Leicht');
+TEMP_admin_log.push('-> made for https://fegsj.de/');
 let TEMP_admin_received_log = [];
 
 const app = express();
@@ -80,6 +82,7 @@ app.use('/', express.static(path.join(__dirname, 'public')));
 
 const connected_player_list = [];
 const player_list = [];
+//	Force reload all Connected Players on Core restart
 io.emit('load-game');
 
 io.on('connection', socket => {
@@ -129,9 +132,6 @@ io.on('connection', socket => {
 			}
 		}
 		const playerIds = players.map(player => player.id);
-		log('Player Sockets: ', players.length);
-		console.log(playerIds);		//TODO: Remove!
-
 
 		// Pool of tasks so they are distributed evenly
 		let shuffledTasks = [];
@@ -218,10 +218,10 @@ io.on('connection', socket => {
 	let sabotage_running = false;
 
 	function start_sabotage_timer() {
-		let sabotage_timer = setInterval(myClock, 1000);
+		let sabotage_timer = setInterval(timer, 1000);
 		let countdown = N_TIME_SABOTAGE;
 
-		function myClock() {
+		function timer() {
 			countdown = countdown - 1;
 			console.log(sabotage_running);
 			if(sabotage_running === true) {
