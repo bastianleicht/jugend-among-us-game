@@ -26,6 +26,8 @@ const stopSabotage$ = document.querySelector('#stop-sabotage');
 const impostorWin = document.querySelector('#impostor-win');
 //	Admin Console
 const adminConsole$ = document.querySelector('#admin-console');
+// Admin Info
+const connectedPlayers$ = document.querySelector('#connected-player-count');
 
 /**
  * Temporarily stored stuff
@@ -100,6 +102,11 @@ socket.on('admin-receive-single-log', log_message => {
 		adminConsole$.scrollTop = adminConsole$.scrollHeight;
 	}
 });
+
+socket.on('updated-player-count', count => {
+	log(`Updated Player Count to: ${count}`);
+	connectedPlayers$.innerHTML = count;
+})
 
 socket.on('sabotage-start', async  () => {
 	sabotageInfo$.classList.remove('disabled');

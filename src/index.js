@@ -88,6 +88,8 @@ io.emit('load-game');
 io.on('connection', socket => {
 	player_list.push(socket)
 
+	io.emit('updated-player-count', io.of('/').sockets.size);
+
 	log(`${socket.handshake.query.customName} (${socket.handshake.query.customID}) connected as: ${socket.handshake.query.role}, total: ${io.of('/').sockets.size}`);
 
 	if(socket.handshake.query.role === 'PLAYER') {
@@ -105,6 +107,13 @@ io.on('connection', socket => {
 
 		socket.emit('receive-player-list', connected_player_list);
 	}
+
+	socket.on('disconnect', function() {
+		log(`${socket.handshake.query.customName} (${socket.handshake.query.customID}) disconnected! total: ${io.of('/').sockets.size}`)
+		let PlayerSocket = connected_player_list.indexOf(socket.handshake.query.customID);
+		connected_player_list.slice(PlayerSocket, 1);
+		io.emit('updated-player-count', io.of('/').sockets.size);
+	})
 
 	socket.on('admin-request-log', socketID => {
 		TEMP_admin_received_log.push(socketID);
