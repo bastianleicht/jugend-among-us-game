@@ -156,7 +156,11 @@ io.on('connection', socket => {
 				}
 
 				const taskId = uuid();
-				playerTasks[player.id][taskId] = shuffledTasks.pop();
+				let nextTask = shuffledTasks.pop();
+				//playerTasks[player.id][taskId] = shuffledTasks.pop();
+				if(!playerTasks[player.id].hasOwnProperty(nextTask)) {
+					playerTasks[player.id][taskId] = nextTask;
+				}
 
 				if (!impostors.includes(player.id)) {
 					taskProgress[taskId] = false;
