@@ -28,6 +28,7 @@ const impostorWin = document.querySelector('#impostor-win');
 const adminConsole$ = document.querySelector('#admin-console');
 // Admin Info
 const connectedPlayers$ = document.querySelector('#connected-player-count');
+const connectedPlayersList$ = document.querySelector('#connected-players-list');
 
 /**
  * Temporarily stored stuff
@@ -35,6 +36,7 @@ const connectedPlayers$ = document.querySelector('#connected-player-count');
 let TEMP_core_log;
 let TEMP_meeting_timer;
 let TEMP_sabotage_timer;
+let TEMP_player_list;
 
 startGame$.addEventListener('click', () => {
 	log('Started the Game');
@@ -106,7 +108,18 @@ socket.on('admin-receive-single-log', log_message => {
 socket.on('updated-player-count', count => {
 	log(`Updated Player Count to: ${count}`);
 	connectedPlayers$.innerHTML = count;
-})
+});
+
+socket.on('updated-player-list', list => {
+	log('Updated Player List:');
+	console.log(list);
+	TEMP_player_list = list;
+	if(list.length >= 1) {
+		connectedPlayersList$.innerHTML = list.join(', ');
+	} else {
+		connectedPlayersList$.innerHTML = 'No Players connected!';
+	}
+});
 
 socket.on('sabotage-start', async  () => {
 	sabotageInfo$.classList.remove('disabled');
