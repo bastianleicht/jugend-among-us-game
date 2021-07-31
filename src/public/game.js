@@ -22,7 +22,8 @@ let impostor$ = false;
 let sabotage_running$ = false;
 let admin_reload$ = false;
 
-//	Custom Settings
+// Settings
+const debug = localStorage.getItem('debug');
 const save_customID$ = localStorage.getItem('customID');
 const save_customName$ = localStorage.getItem('customName');
 //	Game Image & Loading
