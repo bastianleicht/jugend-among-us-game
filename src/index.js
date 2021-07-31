@@ -80,8 +80,8 @@ app.get('/game', (req, res) => {
 
 app.use('/', express.static(path.join(__dirname, 'public')));
 
-const connected_player_list = [];
 let connected_player_count = 0;
+let connected_players = [];
 const player_list = [];
 //	Force reload all Connected Players on Core restart
 io.emit('load-game');
@@ -94,26 +94,17 @@ io.on('connection', socket => {
 	if(socket.handshake.query.role === 'PLAYER') {
 		connected_player_count = connected_player_count + 1;
 		io.emit('updated-player-count', connected_player_count);
+		connected_players.push(socket.handshake.query.customName);
+
 		const playerID = socket.handshake.query.customID;
 		socket.emit('getID', playerID);
-
-		if (!connected_player_list[playerID]) {
-			connected_player_list[playerID] = {};
-		}
-		//connected_player_list[playerID]['socket'] = socket;
-		connected_player_list[playerID]['socketID'] = socket.id;
-		connected_player_list[playerID]['role'] = socket.handshake.query.role;
-		connected_player_list[playerID]['customName'] = socket.handshake.query.customName;
-		connected_player_list[playerID]['customID'] = socket.handshake.query.customID;
-
-		socket.emit('receive-player-list', connected_player_list);
 	}
 
 	socket.on('disconnect', function() {
 		if(socket.handshake.query.role === 'PLAYER') connected_player_count = connected_player_count - 1;
 		log(`${socket.handshake.query.customName} (${socket.handshake.query.customID}) disconnected! total: ${io.of('/').sockets.size}`)
-		let PlayerSocket = connected_player_list.indexOf(socket.handshake.query.customID);
-		connected_player_list.slice(PlayerSocket, 1);
+		let player_socket = connected_players.indexOf(socket.handshake.query.customName);
+		connected_players.splice(player_socket, 1);
 		io.emit('updated-player-count', connected_player_count);
 	})
 
@@ -127,12 +118,6 @@ io.on('connection', socket => {
 		log('Admin: Stopped the Game (reloading everyone)')
 		io.emit('load-game');
 	});
-
-	socket.on('send-player-list', () => {
-		console.log('Sending Player list to Admin');
-		console.log(connected_player_list);
-		socket.emit('receive-player-list', io.of('/').sockets);	//TODO: SOCKETS!!!!!!!!!
-	})
 
 	socket.on('start-game', () => {
 		// Get player sockets
