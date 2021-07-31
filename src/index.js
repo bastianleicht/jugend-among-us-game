@@ -289,7 +289,8 @@ io.on('connection', socket => {
 function emitTaskProgress() {
 	const tasks = Object.values(taskProgress);
 	const completed = tasks.filter(task => task).length;
-	const total = completed / tasks.length;
+	let total = completed / tasks.length;
+	if(isNaN(total)) total = 0;
 	log(`Emitting Progress to: ${total}%`);
 	io.emit('progress', total);
 
