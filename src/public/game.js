@@ -3,7 +3,6 @@
  *
  * PDX-License-Identifier: BSD-2-Clause
  */
-const DEBUG = true;
 /* global io */
 
 /**
@@ -410,7 +409,7 @@ async function playSound(url) {
 
 function log(message) {
 	let d, hours ,minutes, seconds;
-	if ('undefined' !== typeof console && DEBUG) {
+	if ('undefined' !== typeof console && debug) {
 		d = new Date();
 		hours = d.getHours();
 		if (hours < 10)

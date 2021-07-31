@@ -3,6 +3,7 @@
  *
  * PDX-License-Identifier: BSD-2-Clause
  */
+/* global io */
 const DEBUG = true;
 
 const socket = io({
