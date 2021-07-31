@@ -93,8 +93,10 @@ io.on('connection', socket => {
 
 	if(socket.handshake.query.role === 'PLAYER') {
 		connected_player_count = connected_player_count + 1;
-		io.emit('updated-player-count', connected_player_count);
 		connected_players.push(socket.handshake.query.customName);
+		io.emit('updated-player-list', connected_players);
+		io.emit('updated-player-count', connected_player_count);
+		console.log(connected_players);	//TODO
 
 		const playerID = socket.handshake.query.customID;
 		socket.emit('getID', playerID);
@@ -105,12 +107,14 @@ io.on('connection', socket => {
 		log(`${socket.handshake.query.customName} (${socket.handshake.query.customID}) disconnected! total: ${io.of('/').sockets.size}`)
 		let player_socket = connected_players.indexOf(socket.handshake.query.customName);
 		connected_players.splice(player_socket, 1);
+		console.log(connected_players); //TODO:
+		io.emit('updated-player-list', connected_players);
 		io.emit('updated-player-count', connected_player_count);
 	})
 
 	socket.on('admin-request-log', socketID => {
 		TEMP_admin_received_log.push(socketID);
-		console.log(TEMP_admin_log);
+		//console.log(TEMP_admin_log);	//	DEBUG
 		io.emit('admin-receive-log', TEMP_admin_log);
 	});
 
