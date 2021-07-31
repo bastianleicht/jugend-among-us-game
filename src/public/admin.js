@@ -83,6 +83,11 @@ const SOUNDS = {
 };
 
 /**
+ * Admin onload Information
+ */
+socket.emit('admin-receive-information');
+
+/**
  * Game Log
  */
 //	Request the whole log

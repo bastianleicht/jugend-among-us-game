@@ -110,7 +110,12 @@ io.on('connection', socket => {
 		console.log(connected_players); //TODO:
 		io.emit('updated-player-list', connected_players);
 		io.emit('updated-player-count', connected_player_count);
-	})
+	});
+
+	socket.on('admin-receive-information', () => {
+		io.emit('updated-player-list', connected_players);
+		io.emit('updated-player-count', connected_player_count);
+	});
 
 	socket.on('admin-request-log', socketID => {
 		TEMP_admin_received_log.push(socketID);
@@ -280,12 +285,6 @@ io.on('connection', socket => {
 		emitTaskProgress();
 	});
 });
-
-function emitPlayerList() {
-	console.log('Emitting Player List');
-	console.log(player_list);
-	io.emit('receive-player-list', player_list);
-}
 
 function emitTaskProgress() {
 	const tasks = Object.values(taskProgress);
