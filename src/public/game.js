@@ -20,6 +20,7 @@ if(localStorage.getItem('customName') === null) {
 }
 let impostor$ = false;
 let sabotage_running$ = false;
+let admin_reload$ = false;
 
 //	Custom Settings
 const save_customID$ = localStorage.getItem('customID');
@@ -210,8 +211,22 @@ disableMusic$.addEventListener('click', async () => {
 });
 
 socket.on('load-game', async () => {
+	log('Socket: Admin -> reloading webpage!');
+	admin_reload$ = true;
+	await wait(2000);
 	window.location.reload();
-})
+});
+
+window.addEventListener('beforeunload', function (e) {
+	log('User tried to reload the Website!');
+	if(admin_reload$ === false) {
+		log('Blocked reloading the Website!');
+		e.preventDefault();
+		e.returnValue = 'If you refresh this page, you are getting kicked out of the game Session!';
+		socket.disconnect();
+		socket.connect();
+	}
+});
 
 socket.on('getID', id => {
 	log(`Socket: Received Player ID: ${id}`);
