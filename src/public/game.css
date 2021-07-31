@@ -32,7 +32,10 @@ img { width: 100%; }
 	color: red;
 	max-width: 10rem;
 	border-radius: 1rem;
+	border-color: transparent;
+	/*
 	border-color: red;
+	 */
 }
 
 .role {
