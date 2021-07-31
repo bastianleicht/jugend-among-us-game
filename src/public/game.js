@@ -98,6 +98,7 @@ log(`Got customID: ${save_customID$}`);
 /**
  * Temp Storage
  */
+let TEMP_game_started = false;
 let TEMP_sabotage_cooldown;
 let TEMP_kill_cooldown;
 
@@ -296,6 +297,7 @@ socket.on('role', role => {
 
 socket.on('start-game', async () => {
 	log('Socket: Game started!');
+	TEMP_game_started = true;
 	waitingPreloader$.classList.remove('enabled');
 	waitingPreloader$.classList.add('disabled');
 	log('Disabled waitingPreloader');
@@ -305,14 +307,8 @@ socket.on('start-game', async () => {
 	await playSound(SOUNDS.start);
 });
 
-socket.on('progress', progress => {
-	let calc_progress = progress * 100
-	log(`Socket: Updated Progress to: ${calc_progress}%`)
-	progress$.innerHTML = (progress * 100).toFixed(0);
-	progressBar$.style.width = `${progress * 100}%`;
-});
-
 socket.on('play-report', async  () => {
+	if(!TEMP_game_started) return;
 	log('Socket: Player Report -> Emergency Meeting Started!');
 	deadBodyImage$.classList.remove('disabled');
 	deadBodyImage$.classList.add('enabled');
@@ -321,9 +317,10 @@ socket.on('play-report', async  () => {
 	await playSound(SOUNDS.meeting);
 	await wait(2000);
 	await playSound(SOUNDS.sussyBoy);
-})
+});
 
 socket.on('play-meeting', async () => {
+	if(!TEMP_game_started) return;
 	log('Socket: Emergency Meeting Started!');
 	emergencyImage$.classList.remove('disabled');
 	emergencyImage$.classList.add('enabled');
@@ -335,6 +332,7 @@ socket.on('play-meeting', async () => {
 });
 
 socket.on('stop-meeting', async () => {
+	if(!TEMP_game_started) return;
 	log('Socket: Emergency Meeting Ended (Stopped)!');
 	emergencyImage$.classList.add('disabled');
 	emergencyImage$.classList.remove('enabled');
@@ -347,6 +345,7 @@ socket.on('stop-meeting', async () => {
 });
 
 socket.on('sabotage-start', async () => {
+	if(!TEMP_game_started) return;
 	log('Socket: Sabotage started!');
 	sabotageImage$.classList.remove('disabled');
 	sabotageImage$.classList.add('enabled');
@@ -355,6 +354,7 @@ socket.on('sabotage-start', async () => {
 });
 
 socket.on('sabotage-stop', async () => {
+	if(!TEMP_game_started) return;
 	log('Socket: Sabotage stopped!');
 	sabotageImage$.classList.remove('enabled');
 	sabotageImage$.classList.add('disabled');
@@ -363,6 +363,7 @@ socket.on('sabotage-stop', async () => {
 })
 
 socket.on('crew-win', async () => {
+	if(!TEMP_game_started) return;
 	log('Socket: The Crew won the Game!');
 	crewVictoryImage$.classList.remove('disabled');
 	crewVictoryImage$.classList.add('enabled');
@@ -376,6 +377,7 @@ socket.on('crew-win', async () => {
 });
 
 socket.on('impostor-win', async () => {
+	if(!TEMP_game_started) return;
 	log('Socket: The Impostor(s) won the Game!');
 	impostorVictoryImage$.classList.remove('disabled');
 	impostorVictoryImage$.classList.add('enabled');
@@ -391,6 +393,14 @@ socket.on('impostor-win', async () => {
 	} else {
 		await playSound(SOUNDS.youLose);
 	}
+});
+
+socket.on('progress', progress => {
+	if(!TEMP_game_started) return;
+	let calc_progress = progress * 100
+	log(`Socket: Updated Progress to: ${calc_progress}%`)
+	progress$.innerHTML = (progress * 100).toFixed(0);
+	progressBar$.style.width = `${progress * 100}%`;
 });
 
 async function wait(milliseconds) {
