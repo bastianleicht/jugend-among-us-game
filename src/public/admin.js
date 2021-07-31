@@ -47,7 +47,9 @@ startGame$.addEventListener('click', () => {
 stopGame$.addEventListener('click', () => {
 	log('Stopped the Game (reloading everyone)');
 	clearInterval(TEMP_meeting_timer);
+	meetingInfo$.classList.add('disabled');
 	clearInterval(TEMP_sabotage_timer);
+	sabotageInfo$.classList.add('disabled');
 	socket.emit('stop-game');
 });
 
