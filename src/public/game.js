@@ -101,6 +101,7 @@ log(`Got customID: ${save_customID$}`);
 let TEMP_game_started = false;
 let TEMP_sabotage_cooldown;
 let TEMP_kill_cooldown;
+let TEMP_impostor_teammates;
 
 /**
  *	Sounds
@@ -269,9 +270,9 @@ socket.on('tasks', tasks => {
 	}
 });
 
-let impostor_player
 socket.on('receive-impostors', impostors => {
-	impostor_player = impostors;
+	if(!TEMP_game_started) return;
+	TEMP_impostor_teammates = impostors;
 });
 
 socket.on('role', role => {
@@ -284,8 +285,8 @@ socket.on('role', role => {
 		impostorControls$.classList.remove('disabled');
 		impostorControls$.classList.add('enabled');
 		impostorHideButton$.classList.remove('disabled');
-		log(`Socket: Received Impostor Teammates: ${impostor_player.join(', ')}`)
-		impostorTeammates$.innerHTML = impostor_player.join(', ');
+		log(`Socket: Received Impostor Teammates: ${TEMP_impostor_teammates.join(', ')}`)
+		impostorTeammates$.innerHTML = TEMP_impostor_teammates.join(', ');
 	}
 	role$.appendChild(
 		document.createTextNode(`You are a(n) ${role}. Click to dismiss.`)
