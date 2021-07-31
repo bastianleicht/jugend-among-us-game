@@ -162,6 +162,7 @@ impostorHideButton$.addEventListener('click', () => {
 sabotage$.addEventListener('click', () => {
 	socket.emit('sabotage', save_customName$);
 	sabotage$.disabled = true;
+	log('Disabling Sabotage Button!');
 	TEMP_sabotage_cooldown = setInterval(timer, 1000);
 	let countdown = 30;
 
@@ -170,6 +171,7 @@ sabotage$.addEventListener('click', () => {
 		//meetingTimer$.innerHTML = countdown;
 		if(countdown === 0) {
 			clearInterval(TEMP_sabotage_cooldown);
+			log('Re-Enabling sabotage Button!');
 			report$.disabled = false;
 		}
 	}
@@ -178,6 +180,7 @@ sabotage$.addEventListener('click', () => {
 killPlayer$.addEventListener('click', () => {
 	socket.emit('player-killed', save_customName$);
 	killPlayer$.disabled = true;
+	log('Disabling Kill Button!');
 	TEMP_kill_cooldown = setInterval(timer, 1000);
 	let countdown = 30;
 
@@ -186,6 +189,7 @@ killPlayer$.addEventListener('click', () => {
 		//meetingTimer$.innerHTML = countdown;
 		if(countdown === 0) {
 			clearInterval(TEMP_kill_cooldown);
+			log('Re-Enabling Kill Button!');
 			killPlayer$.disabled = false;
 		}
 	}
