@@ -4,6 +4,7 @@
  * PDX-License-Identifier: BSD-2-Clause
  */
 const DEBUG = true;
+/* global io */
 
 /**
  * 	Loading customID and customName.
