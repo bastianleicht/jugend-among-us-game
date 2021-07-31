@@ -190,16 +190,3 @@ function log(message) {
 		console.log(hours + ':' + minutes + ':' + seconds + ' | AMONG US > ' + message);
 	}
 }
-
-/*
-socket.emit('send-player-list');
-
-socket.on('receive-player-list', player_list => {
-	console.log(`Received player list!`)
-	console.log(player_list)
-	for(let player of player_list) {
-		console.log(player.customName)
-		console.log(`Player (${player.handshake.query.customName}) has connected with ID: ${player.id}`)
-	}
-});
- */
