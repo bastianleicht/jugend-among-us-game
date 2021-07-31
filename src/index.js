@@ -81,6 +81,7 @@ app.get('/game', (req, res) => {
 app.use('/', express.static(path.join(__dirname, 'public')));
 
 const connected_player_list = [];
+let connected_player_count = 0;
 const player_list = [];
 //	Force reload all Connected Players on Core restart
 io.emit('load-game');
@@ -88,11 +89,11 @@ io.emit('load-game');
 io.on('connection', socket => {
 	player_list.push(socket)
 
-	io.emit('updated-player-count', io.of('/').sockets.size);
-
 	log(`${socket.handshake.query.customName} (${socket.handshake.query.customID}) connected as: ${socket.handshake.query.role}, total: ${io.of('/').sockets.size}`);
 
 	if(socket.handshake.query.role === 'PLAYER') {
+		connected_player_count = connected_player_count + 1;
+		io.emit('updated-player-count', connected_player_count);
 		const playerID = socket.handshake.query.customID;
 		socket.emit('getID', playerID);
 
@@ -109,10 +110,11 @@ io.on('connection', socket => {
 	}
 
 	socket.on('disconnect', function() {
+		if(socket.handshake.query.role === 'PLAYER') connected_player_count = connected_player_count - 1;
 		log(`${socket.handshake.query.customName} (${socket.handshake.query.customID}) disconnected! total: ${io.of('/').sockets.size}`)
 		let PlayerSocket = connected_player_list.indexOf(socket.handshake.query.customID);
 		connected_player_list.slice(PlayerSocket, 1);
-		io.emit('updated-player-count', io.of('/').sockets.size);
+		io.emit('updated-player-count', connected_player_count);
 	})
 
 	socket.on('admin-request-log', socketID => {
