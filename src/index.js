@@ -45,7 +45,7 @@ const TASKS = [
 	//'Kognitiver Test',
 	//'Geheimbotschaften entschlüsseln',
 	'Funkkommunikation wiederherstellen',
-	//'Crewliste',
+	//'Crew Liste',
 	//'Raumschiff staubsaugen',
 ];
 
@@ -130,7 +130,7 @@ io.on('connection', socket => {
 	socket.on('start-game', () => {
 		// Get player sockets
 		const players = [];
-		for (const [_, socket] of io.of('/').sockets) {
+		for (const socket of io.of('/').sockets) {
 			if (socket.handshake.query.role === 'PLAYER') {
 				players.push(socket);
 			}
