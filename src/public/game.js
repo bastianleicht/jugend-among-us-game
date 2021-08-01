@@ -217,13 +217,6 @@ disableMusic$.addEventListener('click', async () => {
 	await backgroundMusicPlayer.pause();
 });
 
-socket.on('load-game', async () => {
-	log('Socket: Admin -> reloading webpage!');
-	admin_reload$ = true;
-	await wait(2000);
-	window.location.reload();
-});
-
 window.addEventListener('beforeunload', function (e) {
 	log('User tried to reload the Website!');
 	if(admin_reload$ === false) {
@@ -233,6 +226,13 @@ window.addEventListener('beforeunload', function (e) {
 		socket.disconnect();
 		socket.connect();
 	}
+});
+
+socket.on('load-game', async () => {
+	log('Socket: Admin -> reloading webpage!');
+	admin_reload$ = true;
+	await wait(2000);
+	window.location.reload();
 });
 
 socket.on('getID', id => {
