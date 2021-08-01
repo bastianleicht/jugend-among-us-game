@@ -129,7 +129,7 @@ socket.on('updated-player-list', list => {
 	}
 });
 
-socket.on('sabotage-start', async  () => {
+socket.on('sabotage-start', async () => {
 	sabotageInfo$.classList.remove('disabled');
 	TEMP_sabotage_timer = setInterval(timer, 1000);
 	let countdown = 90;
