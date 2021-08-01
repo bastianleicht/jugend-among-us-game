@@ -94,12 +94,11 @@ io.on('connection', socket => {
 	if(socket.handshake.query.role === 'PLAYER') {
 		connected_player_count = connected_player_count + 1;
 		connected_players.push(socket.handshake.query.customName);
-		io.emit('updated-player-list', connected_players);
-		io.emit('updated-player-count', connected_player_count);
-		console.log(connected_players);	//TODO
-
+		//console.log(connected_players);	//	DEBUG
 		const playerID = socket.handshake.query.customID;
 		socket.emit('getID', playerID);
+		io.emit('updated-player-list', connected_players);
+		io.emit('updated-player-count', connected_player_count);
 	}
 
 	socket.on('disconnect', function() {
@@ -107,7 +106,7 @@ io.on('connection', socket => {
 		log(`${socket.handshake.query.customName} (${socket.handshake.query.customID}) disconnected! total: ${io.of('/').sockets.size}`)
 		let player_socket = connected_players.indexOf(socket.handshake.query.customName);
 		connected_players.splice(player_socket, 1);
-		console.log(connected_players); //TODO:
+		//console.log(connected_players); //	DEBUG
 		io.emit('updated-player-list', connected_players);
 		io.emit('updated-player-count', connected_player_count);
 	});
@@ -155,7 +154,7 @@ io.on('connection', socket => {
 				if (shuffledTasks.length === 0) {
 					shuffledTasks = _.shuffle(TASKS);
 				}
-
+				// Male sure the Player wont get the same Task twice
 				if (!playerTasks[player.id]) {
 					playerTasks[player.id] = {};
 				}
@@ -175,6 +174,10 @@ io.on('connection', socket => {
 
 		console.log('player tasks', playerTasks);
 
+		/**
+		 * Generating an array of the Impostors.
+		 * This Array is then getting send to the Impostors.
+		 */
 		const ImpostorNames = [];
 		for (const [id, socket] of io.of('/').sockets) {
 			if(socket.handshake.query.role === 'PLAYER' && impostors.includes(id)) {
